@@ -1,0 +1,11 @@
+{% extends 'base_logged.html' %}
+
+{% block title %} home {% endblock %}
+
+{% block main %}
+
+    <h1>Seja Bem Vindo, {{ user.username }}</h1>
+
+    <p><a href="{% url 'logout' %}">logout</a></p>
+
+{% endblock %}

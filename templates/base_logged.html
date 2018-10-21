@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block aside %}
+    <aside>
+        <nav class="barra-de-navegacao">
+            <a class="link fas fa-home" href="{% url 'user_home' %}" title=""></a>
+            <a class="link" href="{% url 'user_data' %}" title="">Meus Dados</a>
+            <a class="link" href="{% url 'user_stats' %}" title="">Minhas Estatísticas</a>
+            <a class="link" href="{% url 'user_wastes' %}" title="">Meus Resíduos</a>
+        </nav>
+    </aside>
+{% endblock %}
+
+{% block main %}
+
+    <h1>Seja Bem Vindo</h1>
+
+    {% if user.is_authenticated %}
+        <p>Olá, {{ user.username }}</p>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'user_home' %}">Minha Home</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Cadastro</a>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base_logged.html' %}
+{% load bootstrap %}
+
+{% block title %}Formulário de Resíduo{% endblock %}
+
+{% block main %}
+
+    <h3>Formulário de Resíduo</h3>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ waste_form|bootstrap_horizontal }}
+
+        <button class="btn btn-primary" type="submit">Estou comprometido com todas as informações inseridas</button>
+    </form>
+
+{% endblock %}

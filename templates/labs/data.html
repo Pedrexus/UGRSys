@@ -1,0 +1,17 @@
+{% extends 'base_logged.html' %}
+
+{% block title %} Meus Dados {% endblock %}
+
+{% block main %}
+
+    <h1>Seja Bem Vindo, {{ user.username }}</h1>
+
+        <ul>
+            <li>
+                {{ this_user }}
+            </li>
+        </ul>
+
+    <!--TODO: Adicionar UPDATE-->
+
+{% endblock %}

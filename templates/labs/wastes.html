@@ -1,0 +1,22 @@
+{% extends 'base_logged.html' %}
+
+{% block title %} Meus Resíduos {% endblock %}
+
+{% block main %}
+
+    <h3>Meus Resíduos</h3>
+        <ul>
+            {% for waste in my_wastes %}
+                <li>
+                    {{ waste }}
+                    <a class="btn btn-info" href="{% url 'update_waste' waste.id %}">editar</a>
+                    <a class="btn btn-danger" href="{% url 'delete_waste' waste.id %}">deletar</a>
+                </li>
+            {%  endfor %}
+        </ul>
+
+    <h4>
+        <a class="btn btn-primary" href="{% url 'create_waste' %}">Novo Resíduo</a>
+    </h4>
+
+{% endblock %}
