@@ -17,5 +17,5 @@ def generate_view(request, user_id, residuo_id, *args, **kwargs):
         "email": 'bbbbbbbb',
     }
     html = template.render(context)
-    pdf = render_to_pdf('./etiqueta.html', context)
+    pdf = render_to_pdf('pdfwriter/etiqueta.html', context)
     return HttpResponse(pdf, content_type='application/pdf')

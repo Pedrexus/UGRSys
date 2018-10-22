@@ -3,6 +3,7 @@ from django.http import FileResponse, HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 
+"""
 def some_view(request):
     # Create a file-like buffer to receive PDF data.
     buffer = io.BytesIO()
@@ -21,6 +22,7 @@ def some_view(request):
     # FileResponse sets the Content-Disposition header so that browsers
     # present the option to save the file.
     return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+"""
 
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
