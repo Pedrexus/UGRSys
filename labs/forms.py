@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+#from django.forms import formset_factory
 
 from labs.validators import phone_regex
 from .models import Waste, MyUser
@@ -34,8 +35,16 @@ class SignUpForm(UserCreationForm):
 class WasteForm(forms.ModelForm):
     class Meta:
         model = Waste
-        fields = ('amount', 'unit',
+        fields = ('amount',
+                  'pH',
+                  'unit',
                   'chemical_makeup',
+                  'halogen',
+                  'acetonitrile',
+                  'heavy_metals',
+                  'sulfur',
+                  'cyanide',
+                  'amine',
                   'explosive',
                   'flammable',
                   'oxidizing',
@@ -45,11 +54,19 @@ class WasteForm(forms.ModelForm):
                   'health_dangerous',
                   'pollutant',
                   'can_agitate',
-                  'comments')
+                  'comments',
+                  )
         labels = {
             'amount': _('Quantidade?'),
             'unit': _('unidade?'),
-            'chemical_makeup': _('Composição?'),
+            'pH': _('pH'),
+            'halogen': _('O resíduo contém halogenados?'),
+            'acetonitrile': _('O resíduo contém acetonitrila?'),
+            'heavy_metals': _('O resíduo contém metais pesados?'),
+            'sulfur': _('O resíduo contém enxofre ou substâncias sulfuradas?'),
+            'cyanide': _('O resíduo contém geradores de cianeto?'),
+            'amine': _('O resíduo contém aminas?'),
+            'chemical_makeup': _('Composição?'), #TODO mudar o form da composição
             'explosive': _('explosivo?'),
             'flammable': _('inflamável?'),
             'oxidizing': _('oxidante?'),

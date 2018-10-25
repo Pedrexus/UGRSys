@@ -8,32 +8,91 @@
     <div class="wrapper",
          <div class="details">
                 <style type="text/css">
-                .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
-                .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
-                .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-                .tg .tg-x1hj{font-size:22px;border-color:inherit;text-align:left;vertical-align:top}
-                .tg .tg-1692{font-size:32px;border-color:inherit;text-align:left;vertical-align:top}
-                .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-                </style>
-                <table class="tg">
-                  <tr>
-                    <th class="tg-1692" colspan="3"><span style="font-weight:bold">DeGR</span></th>
-                  </tr>
-                  <tr>
-                    <td class="tg-x1hj" colspan="2" rowspan="3"> {{residuo}} <br></td>
-                    <td class="tg-0pky"> {{nome_gerador}} </td>
-                  </tr>
-                  <tr>
-                    <td class="tg-0pky"> {{laboratorio}} </td>
-                  </tr>
-                  <tr>
-                    <td class="tg-0pky"> {{telefone}} </td>
-                  </tr>
-                  <tr>
-                    <td class="tg-0pky" colspan="2"> {{data_de_postagem}} </td>
-                    <td class="tg-0pky"> {{email}} </td>
-                  </tr>
-                </table>
+                    .tg  {border-collapse:collapse;border-spacing:0;
+                            border-color:#ccc;border: 1px solid black;
+                            table-layout: fixed;
+                            width: 200px;}
+
+                    .tg td{font-family:Arial, sans-serif; font-size:14px;
+                        padding:1px 1px;border-style:solid;border-width:1px;
+                        overflow:hidden;word-break:normal;border-color:#ccc;
+                        color:#333;background-color:#fff; table-layout: fixed;}
+
+                    .tg th{font-family:Arial, sans-serif;font-size:14px;
+                        font-weight:normal;padding:1px 1px;
+                        border-style:solid;border-width:1px;overflow:hidden;
+                        word-break:normal;border-color:#ccc;color:#333;
+                        background-color:#f0f0f0; table-layout: fixed;}
+
+                    .tg .tg-inventory_location{font-size:36px;border-color:#000000;
+                        text-align:center;vertical-align:top; table-layout: fixed;}
+
+                    .tg .tg-composicao{font-size:22px;border-color:#000000;
+                        text-align:left;vertical-align:top;
+                        width = 5cm; table-layout: fixed;}
+
+                    .tg .tg-cabecalho{font-size:32px;border-color:#000000;
+                        text-align:center;vertical-align:top; table-layout: fixed; witdth:10cm}
+
+                    .tg .tg-wp8o{border-color:#000000;text-align:center;
+                        vertical-align:top; table-layout: fixed;}
+
+                    .tg .tg-info_user{border-color:#000000;
+                        text-align:left;vertical-align:top; table-layout: fixed;}
+
+                    .tg .tg-73oq{border-color:#000000;
+                        text-align:left;vertical-align:top; table-layout: fixed;}
+
+                    .tg .tg-check{border-color:#000000;
+                        text-align:left;vertical-align:top;
+                        width: 10px;
+                        padding: 1px 1px; table-layout: fixed;}
+
+                    </style>
+                    <table class="tg">
+                      <tr>
+                        <th class="tg-cabecalho" colspan="5"><span style="font-weight:bold">DeGR</span></th>
+                      </tr>
+                      <tr>
+                        <td class="tg-composicao" colspan="4" rowspan="2">{{composicao}}<br></td>
+                        <td class="tg-info_user">{{gerador}}</td>
+                      </tr>
+                      <tr>
+                        <td class="tg-info_user"><br>{{laboratorio}}<br></td>
+                      </tr>
+
+                      <tr>
+                        <td class="tg-info_user" colspan="4">pH: {{pH}}</td>
+                        <td class="tg-info_user">{{departamento}}</td>
+                      </tr>
+                      <tr>
+                        <td class="tg-wp8o" colspan="4">O resíduo contém:<br></td>
+                        <td class="tg-info_user">{{telefone}}<br></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-73oq">Halogenados</td>
+                        <td class="tg-check">{{halogen_check}}</td>
+                        <td class="tg-73oq">Enxofre ou substâncias sulfuradas</td>
+                        <td class="tg-check">{{sulfur_check}}</td>
+                        <td class="tg-73oq">{{email}}</td>
+                      </tr>
+                      <tr>
+                        <td class="tg-73oq">Acetonitrila</td>
+                        <td class="tg-check">{{acetronitrile_check}}</td>
+                        <td class="tg-73oq">Geradores de cianeto</td>
+                        <td class="tg-check">{{cyanide_check}}</td>
+                        <td class="tg-inventory_location" rowspan="2"><span style="font-weight:bold">{{inventory_location}}</span></td>
+                      </tr>
+                      <tr>
+                        <td class="tg-73oq">Metais Pesados</td>
+                        <td class="tg-check">{{heavy_metals_check}}</td>
+                        <td class="tg-73oq">Aminas</td>
+                        <td class="tg-check">{{amine_check}}</td>
+                      </tr>
+                      <tr>
+                        <td class="tg-wp8o" colspan="5">{{residuo_id}}</td>
+                      </tr>
+                    </table>
 
          </div>
     </div>

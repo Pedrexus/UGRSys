@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from decimal import Decimal
 from labs.validators import phone_regex
 
 
@@ -37,6 +37,8 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class Waste(models.Model):
+
+    status = 'user_inventory'
     generator = models.ForeignKey(MyUser, on_delete=models.CASCADE)
 
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -44,6 +46,9 @@ class Waste(models.Model):
 
     amount = models.DecimalField(max_digits=10, decimal_places=3, null=True,
                                  blank=True)
+
+    pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
+                                 blank=True, default=Decimal('7'))
 
     UNITS_CHOICES = (
         ('Kg', 'Kilogramas'),
@@ -53,8 +58,14 @@ class Waste(models.Model):
 
     # Composição química:
     chemical_makeup = models.CharField(max_length=200)
+    # TODO: mudar composição para varios campos
 
-    # TODO: adicionar localização no estoque e talvez data de produção.
+    halogen = models.BooleanField(default=False)
+    acetonitrile = models.BooleanField(default=False)
+    heavy_metals = models.BooleanField(default=False)
+    sulfur = models.BooleanField(default=False)
+    cyanide = models.BooleanField(default=False)
+    amine = models.BooleanField(default=False)
 
     FEATURES_CHOICES = (
         ('SIM', 'Sim'),
@@ -63,6 +74,7 @@ class Waste(models.Model):
     )
 
     # TODO: o default deve ser vazio e nao pode ser permitido ficar vazio.
+    # TODO: checar informações redundantes
     explosive = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
     flammable = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
     oxidizing = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
@@ -75,9 +87,45 @@ class Waste(models.Model):
 
     comments = models.TextField(blank=True)
 
+    def boolean_to_X(self):
+        if self.halogen:
+            self.halogen_check = 'X'
+        else:
+            self.halogen_check = ' '
+
+        if self.acetonitrile:
+            self.acetonitrile_check = 'X'
+        else:
+            self.acetonitrile_check = ' '
+
+        if self.heavy_metals:
+            self.heavy_metals_check = 'X'
+        else:
+            self.heavy_metals_check = ' '
+
+        if self.sulfur:
+            self.sulfur_check = 'X'
+        else:
+            self.sulfur_check = ' '
+
+        if self.cyanide:
+            self.cyanide_check = 'X'
+        else:
+            self.cyanide_check = ' '
+
+        if self.amine:
+            self.amine_check = 'X'
+        else:
+            self.amine_check = ' '
+
+    # TODO: adicionar localização no estoque e talvez data de produção.
+    def inventory_label(self):
+        return 'A1'
+
     class Meta:
         verbose_name = 'Resíduo'
         verbose_name_plural = 'Resíduos'
 
     def __str__(self):
         return ': '.join([self.generator.full_name, self.chemical_makeup])
+
