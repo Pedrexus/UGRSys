@@ -1,3 +1,5 @@
+{% load static %}
+
 <html>
 <head>
    <title>
@@ -5,6 +7,7 @@
    </title>
 </head>
 <body>
+    <meta charset="UTF-8">
     <div class="wrapper",
          <div class="details">
                 <style type="text/css">
@@ -62,7 +65,7 @@
 
                       <tr>
                         <th class="tg-cabecalho" colspan="1">
-                             <img src="DeGR-estilo2-2.jpg" alt="Logo DeGR" style="width:2cm">
+                             <img src="{% static 'images/DeGR-estilo2-2.jpg'%}" alt="Logo DeGR" style="width:2cm">
                         </th>
                         <th class="tg-cabecalho" colspan="3">
                             <font size="+2"> DeGR </font><br>
@@ -70,7 +73,7 @@
                                  (16)3351-8015    degr@ufscar.br</font>
                         </th>
                           <th class="tg-cabecalho" colspan="1">
-                            <img src="logo_ufscar.png" alt="Logo UFSCar" style="width:2cm">
+                            <img src="{% static 'images/logo_ufscar.png'%}" alt="Logo UFSCar" style="width:2cm">
                         </th>
 
                       </tr>
@@ -117,7 +120,7 @@
 
                       <tr>
                         <td class="tg-barcode" colspan="5">
-                        <img src="barcode.png" alt="barcode" style="height:2cm"></td>
+                        <!-- <img src="barcode.png" alt="barcode" style="height:2cm"></td> -->
                       </tr>
 
                     </table>
