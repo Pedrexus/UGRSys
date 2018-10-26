@@ -30,5 +30,5 @@ def generate_view(request, residuo_id, *args, **kwargs):
     }
     html = template.render(context)
     pdf = render_to_pdf('pdfwriter/label.html', context)
-    return HttpResponse(pdf, content_type='application/pdf')
+    return HttpResponse(pdf, content_type='html')
 
