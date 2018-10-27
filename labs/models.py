@@ -1,45 +1,36 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from decimal import Decimal
-from labs.validators import phone_regex
+
+from django.conf import settings
 
 
-# O usuário é uma foreign key para acessar a base de resíduos
-# TODO: o departamento deve ser uma categoria fixa (foreign key)
-class MyUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,
-                                related_name='profile', default=0)
-    full_name = models.CharField(max_length=50)
-    department = models.CharField(max_length=50)
-    email = models.EmailField(null=True, blank=True)
-    phone_number = models.CharField(validators=[phone_regex], max_length=17)
+class Department(models.Model):
+    department_name = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Gerador'
-        verbose_name_plural = 'Geradores'
+        verbose_name = 'Departamento'
+        verbose_name_plural = 'Departamentos'
 
     def __str__(self):
-        return self.full_name
+        return self.department_name
 
 
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        MyUser.objects.create(user=instance)
+class Laboratory(models.Model):
+    lab_name = models.CharField(max_length=100, null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Laboratório'
+        verbose_name_plural = 'Laboratórios'
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    def __str__(self):
+        return self.lab_name
 
 
 class Waste(models.Model):
-
     status = 'user_inventory'
-    generator = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    generator = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                  on_delete=models.CASCADE)
 
     creation_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
@@ -48,7 +39,7 @@ class Waste(models.Model):
                                  blank=True)
 
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
-                                 blank=True, default=Decimal('7'))
+                             blank=True, default=Decimal('7'))
 
     UNITS_CHOICES = (
         ('Kg', 'Kilogramas'),
@@ -75,15 +66,24 @@ class Waste(models.Model):
 
     # TODO: o default deve ser vazio e nao pode ser permitido ficar vazio.
     # TODO: checar informações redundantes
-    explosive = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    flammable = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    oxidizing = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    under_pressure = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    toxic = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    corrosive = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    health_dangerous = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    pollutant = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
-    can_agitate = models.CharField(max_length=7, choices=FEATURES_CHOICES, default='SIM')
+    explosive = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                 default='SIM')
+    flammable = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                 default='SIM')
+    oxidizing = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                 default='SIM')
+    under_pressure = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                      default='SIM')
+    toxic = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                             default='SIM')
+    corrosive = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                 default='SIM')
+    health_dangerous = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                        default='SIM')
+    pollutant = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                 default='SIM')
+    can_agitate = models.CharField(max_length=7, choices=FEATURES_CHOICES,
+                                   default='SIM')
 
     comments = models.TextField(blank=True)
 
@@ -119,6 +119,7 @@ class Waste(models.Model):
             self.amine_check = ' '
 
     # TODO: adicionar localização no estoque e talvez data de produção.
+    # abstract
     def inventory_label(self):
         return 'A1'
 
@@ -128,4 +129,3 @@ class Waste(models.Model):
 
     def __str__(self):
         return ': '.join([self.generator.full_name, self.chemical_makeup])
-

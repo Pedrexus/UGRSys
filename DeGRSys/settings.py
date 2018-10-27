@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrapform',
+    'registration',
     'labs',
+    'dynamicForm',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +84,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+AUTH_USER_MODEL = 'registration.MyUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,3 +128,5 @@ STATICFILES_DIRS = (
 LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = 'user_home'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

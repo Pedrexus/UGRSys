@@ -1,9 +1,4 @@
-import io
-from django.http import FileResponse, HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
-from reportlab.pdfgen import canvas
-from easy_pdf.rendering import render_to_pdf_response
 
 """
 def some_view(request):

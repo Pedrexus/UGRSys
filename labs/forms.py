@@ -1,35 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 #from django.forms import formset_factory
 
-from labs.validators import phone_regex
-from .models import Waste, MyUser
-
-
-class SignUpForm(UserCreationForm):
-    full_name = forms.CharField(max_length=50, required=True, help_text='',
-                                label=_('Nome completo'))
-    #name = full_name.split(' ')
-    #first_name = name[0]
-    #last_name = ' '.join(name[1:])
-
-    department = forms.CharField(max_length=50, required=True, help_text='',
-                                 label=_('Departamento'))
-    email = forms.EmailField(max_length=254, required=False,
-                             help_text='Informe um endereço de e-mail válido.',
-                             label=_('e-mail'))
-    phone_number = forms.CharField(validators=[phone_regex], required=True,
-                                   max_length=17, help_text=_(
-            'Campo Obrigatório. Informe um número de telefone para contato.'),
-                                   label=_('Contato'))
-
-    class Meta:
-        model = User
-        fields = ('username',
-                  'full_name', 'department', 'email', 'phone_number',
-                  'password1', 'password2')
+from .models import Waste
 
 
 class WasteForm(forms.ModelForm):

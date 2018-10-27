@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import MyUser, Waste
+from .models import Waste, Laboratory, Department
 
-admin.site.register(MyUser)
 admin.site.register(Waste)
+admin.site.register(Laboratory)
+admin.site.register(Department)

@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .forms import WasteForm
-from .models import MyUser, Waste
+from .models import Waste
+from registration.models import MyUser
 
 
 @login_required
@@ -37,7 +38,10 @@ def user_wastes_create(request):
 
     if form.is_valid():
         waste = form.save(commit=False)
+
+        #preenchimento do campo "gerador" baseado no usuário que está logado.
         waste.generator = MyUser.objects.get(user=request.user)
+
         waste.save()
         return redirect('user_wastes')
 
