@@ -13,7 +13,7 @@ def user_home(request):
 
 @login_required
 def user_data(request):
-    data = {'this_user': MyUser.objects.get(user=request.user)}
+    data = {'this_user': request.user}
 
     return render(request, 'labs/data.html', data)
 
@@ -27,7 +27,7 @@ def user_stats(request):
 @login_required
 def user_wastes(request):
     # TODO: Modificar para pegar apenas do meu usuário - filter(user = ...)
-    data = {'my_wastes': Waste.objects.filter(generator__user=request.user)}
+    data = {'my_wastes': Waste.objects.filter(generator=request.user)}
 
     return render(request, 'labs/wastes.html', data)
 
@@ -39,8 +39,8 @@ def user_wastes_create(request):
     if form.is_valid():
         waste = form.save(commit=False)
 
-        #preenchimento do campo "gerador" baseado no usuário que está logado.
-        waste.generator = MyUser.objects.get(user=request.user)
+        # preenchimento do campo "gerador" baseado no usuário que está logado.
+        waste.generator = request.user
 
         waste.save()
         return redirect('user_wastes')
@@ -53,8 +53,6 @@ def user_wastes_update(request, waste_id):
     form = WasteForm(request.POST or None, instance=waste)
 
     if form.is_valid():
-        waste = form.save(commit=False)
-        waste.generator = MyUser.objects.get(user=request.user)
         waste.save()
         return redirect('user_wastes')
 
