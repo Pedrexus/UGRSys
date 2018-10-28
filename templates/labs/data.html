@@ -4,14 +4,44 @@
 
 {% block main %}
 
-    <h1>Seja Bem Vindo, {{ user.username }}</h1>
+    <div class="jumbotron">
+        <h1>Dados do usuário</h1>
+    </div>
 
-        <ul>
-            <li>
-                {{ this_user }}
-            </li>
-        </ul>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+            <tr>
+                <th scope="col">Usuário</th>
+                <th scope="col">{{ this_user.username }}</th>
 
-    <!--TODO: Adicionar UPDATE-->
+            </tr>
+      </thead>
+      <tbody>
+            <tr>
+                <th scope="row">Nome</th>
+                <td>{{ this_user.full_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Departamento</th>
+                <td>{{ this_user.department }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Laboratório</th>
+                <td>{{ this_user.laboratory }}</td>
+            </tr>
+            <tr>
+                <th scope="row">e-mail</th>
+                <td>{{ this_user.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Contato</th>
+                <td>{{ this_user.phone_number }}</td>
+            </tr>
+      </tbody>
+    </table>
+
+    <a class="btn btn-info" href="{% url 'update_data' %}">editar</a>
+    <a class="btn btn-outline-dark" href="{% url 'update_password' %}">Mudar senha</a>
+
 
 {% endblock %}

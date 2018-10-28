@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
+from registration.forms import UpdateMyUserForm
 from .forms import WasteForm
 from .models import Waste
 from registration.models import MyUser
@@ -13,9 +14,22 @@ def user_home(request):
 
 @login_required
 def user_data(request):
-    data = {'this_user': request.user}
+    data = {'this_user': request.user, 'user_model': MyUser}
 
     return render(request, 'labs/data.html', data)
+
+
+@login_required
+def user_data_update(request):
+    user = request.user
+    form = UpdateMyUserForm(request.POST or None, instance=user)
+
+    if form.is_valid():
+        user.save()
+        return redirect('user_data')
+
+    data = {'this_user': user, 'form': form}
+    return render(request, 'labs/data_form.html', data)
 
 
 @login_required
