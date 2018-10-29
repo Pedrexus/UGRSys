@@ -4,18 +4,44 @@
 
 {% block main %}
 
-    <h3>Meus Resíduos</h3>
-        <ul>
+    <div class="jumbotron">
+        <h1>Meus Resíduos</h1>
+    </div>
+
+        <table class="table table-striped">
+          <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Resíduo</th>
+                    <th scope="col">Data de modificação</th>
+                    <th scope="col" class="text-center">Editar</th>
+                    <th scope="col" class="text-center">Deletar</th>
+                    <th scope="col" class="text-center">Etiqueta</th>
+                </tr>
+          </thead>
+          <tbody>
             {% for waste in my_wastes %}
-                <li>
-                    {{ waste }}
-                    <a class="btn btn-info" href="{% url 'update_waste' waste.id %}">editar</a> <!-- TODO CHECAR STATUS -->
-                    <a class="btn btn-danger" href="{% url 'delete_waste' waste.id %}">deletar</a>
-                    <a class="btn btn-warning" href="{% url 'pdf_waste' waste.id %}">gerar etiqueta</a>
-                </li>
-	            <br>
-            {%  endfor %}
-        </ul>
+                <tr>
+                    <th scope="row">{{ waste.chemical_makeup }}</th>
+                    <td>{{ waste.last_modified_date }}</td>
+                    <td class="text-center">
+                        <a class="btn btn-info" href="{% url 'update_waste' waste.id %}">
+                             <i class="fas fa-pen fa-2x"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-danger" href="{% url 'delete_waste' waste.id %}">
+                            <i class="fas fa-trash-alt fa-2x"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-warning" href="{% url 'pdf_waste' waste.id %}">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
 
     <h4>
         <a class="btn btn-primary" href="{% url 'create_waste' %}">Novo Resíduo</a>

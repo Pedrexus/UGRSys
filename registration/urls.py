@@ -1,6 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from .views import home, home_logout, signup, activate, account_activation_sent
-from django.contrib.auth import views as auth_views
+from passwords import urls as password_modification_urls
 
 urlpatterns = [
     path('', home, name='home'),
@@ -8,5 +8,5 @@ urlpatterns = [
     path('signup/', signup, name='signup'),
     path('account_activation_sent/', account_activation_sent, name='account_activation_sent'),
     path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
-    path('change-password/', auth_views.PasswordChangeView.as_view(), name='update_password'),
+    path('senhas/', include(password_modification_urls))
 ]
