@@ -88,7 +88,7 @@ aside + main {
     font-size: 22px !important;
     text-decoration: none;
     padding: calc(0.3rem + 3px);
-    background-color: black;
+    background-color: transparent;
     transition: text-shadow .35s, color 3s;
 }
 
@@ -98,4 +98,23 @@ aside + main {
     text-decoration: none;
 
     text-shadow: 0 0 10px pink;
+}
+
+.footer-distributed .footer-icons .img-degr {
+    width: 88px;
+    height: 80px;
+}
+
+.footer-distributed .footer-icons .img-ufscar {
+    width: 88px;
+    height: 88px;
+}
+
+.footer-distributed .footer-icons .img-link {
+    border: 5px solid white;
+    border-radius: 15%;
+}
+
+.img {
+    width: 100%;
 }

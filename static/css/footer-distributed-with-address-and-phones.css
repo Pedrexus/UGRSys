@@ -154,7 +154,7 @@
 
 .footer-distributed .footer-icons a:focus,
 .footer-distributed .footer-icons a:hover {
-    box-shadow: 0 0 0.5em black;
+    box-shadow: 7px 7px 0.65em black;
 }
 
 /* If you don't want the footer to be responsive, remove these media queries */
