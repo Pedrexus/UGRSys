@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 from labs import urls as labs_urls
 from registration import urls as home_urls
 from pdfwriter import urls as pdf_urls
-from dynamicForm import urls as dynamic_urls
+# from dynamicForm import urls as dynamic_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),

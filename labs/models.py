@@ -39,8 +39,8 @@ class Waste(models.Model):
     last_modified_date = models.DateTimeField(auto_now=True,
                                               verbose_name='Data de modificação')
 
-    amount = models.DecimalField(max_digits=10, decimal_places=3, null=True,
-                                 blank=True, verbose_name='Quantidade')
+    amount = models.DecimalField(max_digits=10, decimal_places=3,
+                                 verbose_name='Quantidade')
     status = models.BooleanField(verbose_name='Entregue', default=False)
 
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,

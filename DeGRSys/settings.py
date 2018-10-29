@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'registration',
     'labs',
-    'dynamicForm',
+  # 'dynamicForm',
 ]
 
 MIDDLEWARE = [
