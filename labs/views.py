@@ -40,7 +40,7 @@ def user_stats(request):
 
 @login_required
 def user_wastes(request):
-    # TODO: Modificar para pegar apenas do meu usuário - filter(user = ...)
+    # DEPRECATED?: Modificar para pegar apenas do meu usuário - filter(user = ...)
     data = {'my_wastes': Waste.objects.filter(generator=request.user)}
 
     return render(request, 'labs/wastes.html', data)

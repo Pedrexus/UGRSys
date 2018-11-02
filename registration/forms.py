@@ -36,6 +36,7 @@ class SignUpForm(UserCreationForm):
 
 
 class UpdateMyUserForm(forms.ModelForm):
+    #TODO: por que nao pode atualizar o email?
     full_name = forms.CharField(max_length=50, required=True, help_text='',
                                 label=_('Nome completo'))
     department = forms.ModelChoiceField(queryset=Department.objects.all(),

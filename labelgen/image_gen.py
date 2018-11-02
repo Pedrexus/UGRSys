@@ -3,6 +3,7 @@ from PIL import Image
 
 import random
 
+#TODO: implementar geração codigo de barra
 def graphics(request):
 # ... create/load image here ...
     INK = "red", "blue", "green", "yellow"

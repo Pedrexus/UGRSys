@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.template.loader import get_template
 
 from labs.models import Waste
-from .labels import render_to_pdf
+from .labels import render_label
 
 
 @login_required
@@ -27,7 +26,7 @@ def generate_view(request, residuo_id, *args, **kwargs):
         "pH": waste.pH,
         "inventory_location": waste.inventory_label()
     }
-    # template = get_template('pdfwriter/label.html')
-    # html = template.render(context)
-    pdf = render_to_pdf('pdfwriter/label.html', context)
-    return HttpResponse(pdf, content_type='html')
+
+#TODO: INCLUIR OPÇÃO PARA OUTROS TAMANHOS DE ETIQUETA
+    label = render_label('labelgen/label.html', context)
+    return HttpResponse(label, content_type='html')
