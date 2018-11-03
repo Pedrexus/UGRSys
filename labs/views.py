@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from registration.forms import UpdateMyUserForm
 from .forms import WasteForm
-from .models import Waste
+from .models import Waste, BookmarkedWaste
 from registration.models import MyUser
 
 
@@ -40,7 +40,6 @@ def user_stats(request):
 
 @login_required
 def user_wastes(request):
-    # DEPRECATED?: Modificar para pegar apenas do meu usuário - filter(user = ...)
     data = {'my_wastes': Waste.objects.filter(generator=request.user)}
 
     return render(request, 'labs/wastes.html', data)
@@ -81,3 +80,15 @@ def user_wastes_delete(request, waste_id):
         return redirect('user_wastes')
 
     return render(request, 'labs/waste_delete.html', {'this_waste': waste})
+
+
+def user_wastes_bookmark(request, waste_id):
+    waste = get_object_or_404(Waste, pk=waste_id)
+
+    if request.method == 'POST':
+        bookmarked_waste = BookmarkedWaste.objects.create(waste)
+        bookmarked_waste.save()
+
+        return redirect('user_wastes')
+
+    return render(request, 'labs/waste_bookmark.html')

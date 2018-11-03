@@ -113,15 +113,15 @@ class Waste(models.Model):
         return ': '.join([self.generator.full_name, self.chemical_makeup])
 
     def boolean_to_X(self):
-        substance_properties = {'halogen': self.halogen,
+        substance_properties = {'halogen':      self.halogen,
                                 'acetonitrile': self.acetonitrile,
                                 'heavy_metals': self.heavy_metals,
-                                'sulfur': self.sulfur,
-                                'cyanide': self.cyanide,
-                                'amine': self.amine}
+                                'sulfur':       self.sulfur,
+                                'cyanide':      self.cyanide,
+                                'amine':        self.amine}
 
         property_checks = {name: (lambda x: 'X' if x else ' ')(boolean) for
-                         name, boolean in substance_properties.items()}
+                           name, boolean in substance_properties.items()}
 
         return property_checks
 
@@ -129,3 +129,11 @@ class Waste(models.Model):
     def inventory_label(self):
         # abstract
         return 'A1'
+
+
+class BookmarkedWaste(Waste):
+    amount = status = unit = None
+
+    class Meta:
+        verbose_name = 'Resíduo Favorito'
+        verbose_name_plural = 'Resíduos Favoritos'

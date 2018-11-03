@@ -4,47 +4,69 @@
 
 {% block main %}
 
-    <div class="jumbotron">
-        <h1>Meus Resíduos</h1>
-    </div>
+	<div class="jumbotron">
+		<h1>Meus Resíduos</h1>
+	</div>
 
-        <table class="table table-striped">
-          <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Resíduo</th>
-                    <th scope="col">Data de modificação</th>
-                    <th scope="col" class="text-center">Editar</th>
-                    <th scope="col" class="text-center">Deletar</th>
-                    <th scope="col" class="text-center">Etiqueta</th>
-                </tr>
-          </thead>
-          <tbody>
-            {% for waste in my_wastes %}
-                <tr>
-                    <th scope="row">{{ waste.chemical_makeup }}</th>
-                    <td>{{ waste.last_modified_date }}</td>
-                    <td class="text-center">
-                        <a class="btn btn-info" href="{% url 'update_waste' waste.id %}">
-                             <i class="fas fa-pen fa-2x"></i>
-                        </a>
-                    </td>
-                    <td class="text-center">
-                        <a class="btn btn-danger" href="{% url 'delete_waste' waste.id %}">
-                            <i class="fas fa-trash-alt fa-2x"></i>
-                        </a>
-                    </td>
-                    <td class="text-center">
-                        <a class="btn btn-warning" href="{% url 'pdf_waste' waste.id %}">
-                            <i class="fas fa-file-alt fa-2x"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+	<table class="table table-striped table-responsive-md">
+		<thead class="thead-dark">
+		<tr>
+			<th scope="col">Resíduo</th>
+			<th scope="col">Data de modificação</th>
+			<th scope="col" class="text-center">Editar</th>
+			<th scope="col" class="text-center">Deletar</th>
+			<th scope="col" class="text-center">Etiqueta</th>
+			<th scope="col" class="text-center">Favoritar</th>
+			<th scope="col" class="text-center">Enviar</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for waste in my_wastes %}
+			<tr>
+				<th scope="row">{{ waste.chemical_makeup }}</th>
+				<td>{{ waste.last_modified_date }}</td>
+				<td class="text-center">
+					<a class="btn btn-info"
+					   href="{% url 'update_waste' waste.id %}">
+						<i class="fas fa-pen fa-2x"></i>
+					</a>
+				</td>
+				<td class="text-center">
+					<a class="btn btn-danger"
+					   href="{% url 'delete_waste' waste.id %}">
+						<i class="fas fa-trash-alt fa-2x"></i>
+					</a>
+				</td>
+				<td class="text-center">
+					<a class="btn btn-warning"
+					   href="{% url 'pdf_waste' waste.id %}">
+						<i class="fas fa-file-alt fa-2x"></i>
+					</a>
+				</td>
+				<td class="text-center">
+					<a class="btn btn-success"
+					   href="{% url 'bookmark_waste' waste.id %}">
+						<i class="fas fa-star fa-2x text-warning"></i>
+					</a>
+					</form>
+				</td>
+				<td class="text-center">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input big-checkbox"
+						       id="{{ waste.id }}">
+						<label class="custom-control-label" for="{{ waste.id }}">
+						</label>
+					</div>
+					<!--A tabela inteira tem q virar um ModelForm -->
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
 
-    <h4>
-        <a class="btn btn-primary" href="{% url 'create_waste' %}">Novo Resíduo</a>
-    </h4>
+	<h4>
+		<a class="btn btn-primary" href="{% url 'create_waste' %}">Novo
+			Resíduo</a>
+	</h4>
 
 {% endblock %}

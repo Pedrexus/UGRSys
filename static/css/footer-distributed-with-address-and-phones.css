@@ -157,6 +157,26 @@
     box-shadow: 7px 7px 0.65em black;
 }
 
+
+.footer-distributed .footer-icons .img-degr {
+    width: 88px;
+    height: 80px;
+}
+
+.footer-distributed .footer-icons .img-ufscar {
+    width: 88px;
+    height: 88px;
+}
+
+.footer-distributed .footer-icons .img-link {
+    border: 5px solid white;
+    border-radius: 15%;
+}
+
+.img {
+    width: 100%;
+}
+
 /* If you don't want the footer to be responsive, remove these media queries */
 
 @media (max-width: 880px) {

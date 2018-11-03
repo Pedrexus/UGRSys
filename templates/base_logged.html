@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
 
 {% block aside %}
-    <aside>
-        <nav class="barra-de-navegacao">
-            <a class="link fas fa-home" href="{% url 'user_home' %}" title=""></a>
-            <a class="link" href="{% url 'user_data' %}" title="">Meus Dados</a>
-            <a class="link" href="{% url 'user_stats' %}" title="">Minhas Estatísticas</a>
-            <a class="link" href="{% url 'user_wastes' %}" title="">Meus Resíduos</a>
+    <aside class="p-2">
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+	        <a class="navbar-brand" href="{% url 'user_home' %}">
+		        <i class="fas fa-home"></i>
+		         Home
+	        </a>
+
+	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+	        <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
+		        <div class="navbar-nav">
+	                <a class="nav-item nav-link" href="{% url 'user_data' %}" title="">Meus Dados</a>
+	                <a class="nav-item nav-link" href="{% url 'user_stats' %}" title="">Minhas Estatísticas</a>
+	                <a class="nav-item nav-link" href="{% url 'user_wastes' %}" title="">Meus Resíduos</a>
+		        </div>
+	        </div>
         </nav>
     </aside>
 {% endblock %}

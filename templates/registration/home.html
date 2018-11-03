@@ -2,6 +2,12 @@
 
 {% block title %}Seja Bem Vindo{% endblock %}
 
+{% block aside %}
+
+	<h1 class="jumbotron text-center">Sistema de Gestão de Resíduos do DeGR</h1>
+
+{% endblock %}
+
 {% block main %}
 
     <h1>Seja Bem Vindo</h1>
@@ -11,9 +17,11 @@
         <a href="{% url 'logout' %}">Logout</a>
         <a href="{% url 'user_home' %}">Minha Home</a>
     {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'signup' %}">Cadastro</a>
-        <a href="{% url 'reset_password' %}">Esqueci a senha</a>
+	    <div class="btn-group btn-group-md" role="group" aria-label="Basic example">
+	            <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+	            <a class="btn btn-primary" href="{% url 'signup' %}">Cadastro</a>
+	            <a class="btn btn-primary" href="{% url 'reset_password' %}">Esqueci a senha</a>
+		</div>
     {% endif %}
 
 {% endblock %}
