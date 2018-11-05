@@ -1,4 +1,5 @@
-{% load media %}
+
+{% load static %}
 
 <html>
 <head>
@@ -65,7 +66,7 @@
 
                       <tr>
                         <th class="tg-cabecalho" colspan="1">
-
+                        <img src="{% static 'DeGR-estilo2-2.png'%}"  alt="barcode" style="height:2cm"></td>
 
                         </th>
                         <th class="tg-cabecalho" colspan="3">
@@ -74,7 +75,7 @@
                                  (16)3351-8015    degr@ufscar.br</font>
                         </th>
                           <th class="tg-cabecalho" colspan="1">
-
+                          <img src="{% static 'logo_ufscar.png'%}"  alt="barcode" style="height:2cm"></td>
                         </th>
 
                       </tr>
@@ -122,7 +123,7 @@
                       <tr>
                         <td class="tg-barcode" colspan="5">
 
-                           <img src="{% media 'barcode.png'%}"  alt="barcode" style="height:2cm"></td>
+                           <img src="/media/barcode.png"  alt="barcode" style="height:2cm"></td>
                       </tr>
 
                     </table>
