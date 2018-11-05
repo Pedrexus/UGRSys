@@ -16,12 +16,20 @@
                     <th scope="col" class="text-center">Editar</th>
                     <th scope="col" class="text-center">Deletar</th>
                     <th scope="col" class="text-center">Etiqueta</th>
+                    <th scope="col" class="text-center">Duplicar</th>
+                    <th scope="col" class="text-center">Pedir retirada</th>
                 </tr>
           </thead>
           <tbody>
             {% for waste in my_wastes %}
                 <tr>
-                    <th scope="row">{{ waste.chemical_makeup }}</th>
+                    {% if waste.user_editable %}
+                        <th scope="row">{{ waste.chemical_makeup }} aguardando retirada</th>
+                    {% else %}
+                    {% if waste.status == 'user_inventory' %}
+                        <th scope="row">{{ waste.chemical_makeup }}</th>
+                    {% endif %}
+                    {% endif %}
                     <td>{{ waste.last_modified_date }}</td>
                     <td class="text-center">
                         <a class="btn btn-info" href="{% url 'update_waste' waste.id %}">
@@ -34,7 +42,17 @@
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-warning" href="{% url 'pdf_waste' waste.id %}">
+                        <a class="btn btn-warning" href="{% url 'label_waste' waste.id %}">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </a>
+                    </td>
+                     <td class="text-center">
+                        <a class="btn btn-primary" href="{% url 'duplicate_waste' waste.id %}">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-primary" href="{% url 'ask_removal_waste' waste.id %}">
                             <i class="fas fa-file-alt fa-2x"></i>
                         </a>
                     </td>

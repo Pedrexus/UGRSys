@@ -30,6 +30,10 @@ class Laboratory(models.Model):
 
 
 class Waste(models.Model):
+    status_list = ['user_inventory','waiting_removal','degr_inventory','neutralized']
+    status = status_list[0]
+    user_editable = True
+
     generator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   on_delete=models.CASCADE,
                                   verbose_name='Gerador')
@@ -41,11 +45,13 @@ class Waste(models.Model):
 
     amount = models.DecimalField(max_digits=10, decimal_places=3,
                                  verbose_name='Quantidade')
-    status = models.BooleanField(verbose_name='Entregue', default=False)
+
+    #TODO: existem mais status: inventorio_usuario, pedido pra recolher, recolhido, inventorio degr, processado
 
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
                              blank=True, default=Decimal('7'))
-
+    #TODO: tamanho da embalagem
+    #TODO: realmente vale a pena ter as duas unidades?
     UNITS_CHOICES = (
         ('Kg', 'Kilogramas'),
         ('L', 'Litros')
@@ -58,50 +64,39 @@ class Waste(models.Model):
                                        verbose_name='Composição química')
     # TODO: mudar composição para varios campos
 
-    halogen = models.BooleanField(default=False, verbose_name='Halogenados',
-                                  name='halogen')
-    acetonitrile = models.BooleanField(default=False,
-                                       verbose_name='Acetonitrilas',
-                                       name='acetonitrile')
-    heavy_metals = models.BooleanField(default=False,
-                                       verbose_name='Metais pesados',
-                                       name='heavy_metals')
-    sulfur = models.BooleanField(default=False, verbose_name='Sulfurados',
-                                 name='sulfur')
-    cyanide = models.BooleanField(default=False,
-                                  verbose_name='Geradores de cianeto',
-                                  name='cyanide')
-    amine = models.BooleanField(default=False, verbose_name='Aminas',
-                                name='amine')
-
-    FEATURES_CHOICES = (
-        ('SIM', 'Sim'),
-        ('NÃO', 'Não'),
-        ('NÃO SEI', 'Não Sei'),
+    # deprecated?: o default deve ser vazio e nao pode ser permitido ficar vazio.
+    # deprecated?: checar informações redundantes
+    STATE = (
+        ('L','Líquido'),
+        ('S','Sólido')
     )
 
-    # TODO: o default deve ser vazio e nao pode ser permitido ficar vazio.
-    # TODO: checar informações redundantes
-    explosive = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                 default='SIM', verbose_name='Explosivo')
-    flammable = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                 default='SIM', verbose_name='Inflamável')
-    oxidizing = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                 default='SIM', verbose_name='Oxidante')
-    under_pressure = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                      default='SIM',
-                                      verbose_name='Sob pressão')
-    toxic = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                             default='SIM', verbose_name='Tóxico')
-    corrosive = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                 default='SIM', verbose_name='Corrosivo')
-    health_dangerous = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                        default='SIM',
-                                        verbose_name='Dano à saúde')
-    pollutant = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                 default='SIM', verbose_name='Poluente')
-    can_agitate = models.CharField(max_length=7, choices=FEATURES_CHOICES,
-                                   default='SIM', verbose_name='Agitável')
+    is_liquid = models.CharField(max_length=7, choices=STATE, default='L',
+                            verbose_name='Estado do resíduo:')
+
+    SOLVENT = (
+        ('A','Solução Aquosa'),
+        ('O','Solvente Orgânico')
+    )
+
+    solvent_type = models.CharField(max_length=7, choices=SOLVENT, default='A',
+                                 verbose_name='Solvente principal', name='solvent_type')
+
+    halogen = models.BooleanField(default=False, verbose_name='Halogenados', name='halogen')
+    acetonitrile = models.BooleanField(default=False, verbose_name='Acetonitrilas', name='acetonitrile')
+    heavy_metals = models.BooleanField(default=False, verbose_name='Metais pesados', name='heavy_metals')
+    sulfur = models.BooleanField(default=False, verbose_name='Sulfurados', name='sulfur')
+    cyanide = models.BooleanField(default=False, verbose_name='Geradores de cianeto', name='cyanide')
+    amine = models.BooleanField(default=False, verbose_name='Aminas', name='amine')
+    explosive = models.BooleanField(default=False, verbose_name='Explosivo', name='explosive')
+    flammable = models.BooleanField(default=False, verbose_name='Inflamável', name='flammable')
+    oxidizing = models.BooleanField(default=False, verbose_name='Oxidante', name='oxidizing')
+    under_pressure = models.BooleanField(default=False, verbose_name='Sob pressão', name='under_pressure') #pushing down on me...
+    toxic = models.BooleanField(default=False, verbose_name='Tóxico', name='toxic') #THAT'S SILLY
+    corrosive = models.BooleanField(default=False, verbose_name='Corrosivo', name='corrosive')
+    health_dangerous = models.BooleanField(default=False, verbose_name='Dano à saúde', name='health_dangerous') #THAT'S SILLY
+    pollutant = models.BooleanField(default=False, verbose_name='Poluente', name='pollutant') #THAT'S SILLY
+    can_agitate = models.BooleanField(default=False, verbose_name='Agitável', name='can_agitate')
 
     comments = models.TextField(blank=True, verbose_name='Comentários')
 
@@ -110,6 +105,7 @@ class Waste(models.Model):
         verbose_name_plural = 'Resíduos'
 
     def __str__(self):
+        #TODO: por que tem que aparecer o nome do gerador na lista de residuos?
         return ': '.join([self.generator.full_name, self.chemical_makeup])
 
     def boolean_to_X(self):
@@ -118,7 +114,17 @@ class Waste(models.Model):
                                 'heavy_metals': self.heavy_metals,
                                 'sulfur': self.sulfur,
                                 'cyanide': self.cyanide,
-                                'amine': self.amine}
+                                'amine': self.amine,
+                                'explosive': self.explosive,
+                                'flammable': self.flammable,
+                                'oxidizing': self.oxidizing,
+                                'under_pressure': self.under_pressure,
+                                'toxic': self.toxic,
+                                'corrosive': self.corrosive,
+                                'health_dangerous':self.health_dangerous,
+                                'pollutant' :self.pollutant,
+                                'can_agitate':self.can_agitate
+                                }
 
         property_checks = {name: (lambda x: 'X' if x else ' ')(boolean) for
                          name, boolean in substance_properties.items()}
@@ -127,5 +133,49 @@ class Waste(models.Model):
 
     # TODO: adicionar localização no estoque e talvez data de produção.
     def inventory_label(self):
-        # abstract
-        return 'A1'
+        s = ''
+
+        if self.is_liquid=='S':
+            s+='1'
+        elif self.is_liquid=='L':
+            s+='2'
+
+            if self.solvent_type == 'O':
+                s+='.1'
+                if self.cyanide:
+                    s+='.1'
+                elif self.halogen:
+                    s+='.2'
+                elif self.toxic:
+                    s+='.3'
+                else:
+                    s+='.0'
+
+            elif self.solvent_type =='A':
+                s+= '.2'
+                if self.toxic:
+                    s+='.1'
+                else:
+                    s+='.0'
+
+                if self.pH==7:
+                    s+='.7'
+                elif self.pH<7:
+                    s+='.6'
+                elif self.pH > 7:
+                        s += '.8'
+
+            else:
+                s+= '.0'
+
+
+        else:
+            s+='0'
+
+        return s
+
+    def status_update(self):
+        if self.status == 'user_inventory':
+            self.user_editable == True
+        else:
+            self.user_editable == False

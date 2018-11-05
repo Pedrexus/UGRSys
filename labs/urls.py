@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import user_home, user_data, user_stats, user_wastes, \
     user_wastes_create, user_wastes_update, user_wastes_delete, \
-    user_data_update
+    user_data_update, user_wastes_duplicate, user_wastes_ask_removal
 
 urlpatterns = [
     path('user/', user_home, name='user_home'),
@@ -12,4 +12,6 @@ urlpatterns = [
     path('meus_residuos/create/', user_wastes_create, name='create_waste'),
     path('meus_residuos/update/<int:waste_id>/', user_wastes_update, name='update_waste'),
     path('meus_residuos/delete/<int:waste_id>/', user_wastes_delete, name='delete_waste'),
+    path('meus_residuos/duplicate/<int:waste_id>/', user_wastes_duplicate, name='duplicate_waste'),
+    path('meus_residuos/ask_removal/<int:waste_id>/', user_wastes_ask_removal, name='ask_removal_waste'),
 ]

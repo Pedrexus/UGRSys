@@ -55,7 +55,7 @@ def user_wastes_create(request):
 
         # preenchimento do campo "gerador" baseado no usuário que está logado.
         waste.generator = request.user
-
+        waste.status_update()
         waste.save()
         return redirect('user_wastes')
 
@@ -64,20 +64,43 @@ def user_wastes_create(request):
 
 def user_wastes_update(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
-    form = WasteForm(request.POST or None, instance=waste)
-
-    if form.is_valid():
-        waste.save()
+    if waste.status == 'user_inventory':
+        form = WasteForm(request.POST or None, instance=waste)
+        if form.is_valid():
+            waste.status_update()
+            waste.save()
+            return redirect('user_wastes')
+        return render(request, 'labs/waste_form.html', {'waste_form': form})
+    else:
         return redirect('user_wastes')
-
-    return render(request, 'labs/waste_form.html', {'waste_form': form})
-
 
 def user_wastes_delete(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
+    if waste.status == 'user_inventory':
+        if request.method == 'POST':
+            waste.delete()
+            waste.status_update()
+            return redirect('user_wastes')
 
-    if request.method == 'POST':
-        waste.delete()
+        return render(request, 'labs/waste_delete.html', {'this_waste': waste})
+    else:
         return redirect('user_wastes')
 
-    return render(request, 'labs/waste_delete.html', {'this_waste': waste})
+def user_wastes_duplicate(request, waste_id):
+    new_waste = Waste.objects.get(pk=waste_id)
+    new_waste.pk = None
+    new_waste.status = 'user_inventory'
+    new_waste.status_update()
+    new_waste.save()
+
+    return redirect('user_wastes')
+
+def user_wastes_ask_removal(request, waste_id):
+    waste = get_object_or_404(Waste, pk=waste_id)
+    print('oi')
+    if request.method == 'POST':
+        waste.status = 'waiting_removal'
+        waste.save()
+        print('ola' + waste.status)
+        return redirect('user_wastes')
+    return render(request, 'labs/waste_ask_removal.html', {'this_waste': waste})
