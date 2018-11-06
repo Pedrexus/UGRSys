@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
+from labs.waste_status import update_wastes
 from registration.forms import UpdateMyUserForm
 from registration.models import MyUser
 from .forms import WasteForm
@@ -40,8 +41,13 @@ def user_stats(request):
 
 @login_required
 def user_wastes(request):
-    data = {'my_wastes': Waste.objects.filter(generator=request.user),
-            'my_bookmarked_wastes': Waste.objects.filter(generator=request.user)}
+    data = {'my_wastes_with_me': Waste.objects.filter(
+        generator=request.user, status=Waste.STATUS_1),
+        'my_wastes_status_2':    Waste.objects.filter(generator=request.user,
+                                                      status=Waste.STATUS_2),
+        'my_bookmarked_wastes':  []}
+
+    update_wastes(request, opt='send')
 
     return render(request, 'labs/wastes.html', data)
 
@@ -64,27 +70,24 @@ def user_wastes_create(request):
 
 def user_wastes_update(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
-    if waste.status == 'user_inventory':
-        form = WasteForm(request.POST or None, instance=waste)
-        if form.is_valid():
-            waste.status_update()
-            waste.save()
-            return redirect('user_wastes')
-        return render(request, 'labs/waste_form.html', {'waste_form': form})
-    else:
+    form = WasteForm(request.POST or None, instance=waste)
+
+    if form.is_valid():
+        waste.save()
         return redirect('user_wastes')
+
+    return render(request, 'labs/waste_form.html', {'waste_form': form})
+
 
 def user_wastes_delete(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
-    if waste.status == 'user_inventory':
-        if request.method == 'POST':
-            waste.delete()
-            waste.status_update()
-            return redirect('user_wastes')
-
-        return render(request, 'labs/waste_delete.html', {'this_waste': waste})
-    else:
+    if request.method == 'POST':
+        waste.delete()
+        waste.status_update()
         return redirect('user_wastes')
+
+    return render(request, 'labs/waste_delete.html', {'this_waste': waste})
+
 
 def user_wastes_duplicate(request, waste_id):
     new_waste = Waste.objects.get(pk=waste_id)
@@ -108,6 +111,7 @@ def user_wastes_bookmark(request, waste_id):
 
     return render(request, 'labs/waste_bookmark.html', {'this_waste': waste})
 
+
 def user_wastes_ask_removal(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
     print('oi')
@@ -116,4 +120,5 @@ def user_wastes_ask_removal(request, waste_id):
         waste.save()
         print('ola' + waste.status)
         return redirect('user_wastes')
-    return render(request, 'labs/waste_ask_removal.html', {'this_waste': waste})
+    return render(request, 'labs/waste_ask_removal.html',
+                  {'this_waste': waste})

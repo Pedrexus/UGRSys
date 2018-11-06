@@ -8,7 +8,7 @@ from .labels import render_label
 @login_required
 def generate_view(request, residuo_id, *args, **kwargs):
     waste = Waste.objects.get(pk=residuo_id)
-    checks = waste.boolean_to_X()
+    checks = waste.boolean_to_x()
 
     context = {
         "residuo": waste.chemical_makeup,

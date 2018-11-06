@@ -67,14 +67,6 @@ class WasteForm(forms.ModelForm):
             },
         }
         widgets = {
-           # 'explosive': forms.RadioSelect,
-           # 'flammable': forms.RadioSelect,
-           # 'oxidizing': forms.RadioSelect,
-           # 'under_pressure': forms.RadioSelect,
-           # 'toxic': forms.RadioSelect,
-           # 'corrosive': forms.RadioSelect,
-           # 'health_dangerous': forms.RadioSelect,
-           # 'pollutant': forms.RadioSelect,
-           # 'can_agitate': forms.RadioSelect,
             'comments': forms.Textarea(attrs={'cols': 30, 'rows': 10}),
         }
+
