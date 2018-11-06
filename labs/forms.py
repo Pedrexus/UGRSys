@@ -10,8 +10,10 @@ class WasteForm(forms.ModelForm):
         model = Waste
         #TODO: colocar os booleanos todos juntos
         fields = ('amount',
-                  'pH',
                   'unit',
+                  'is_liquid',
+                  'solvent_type',
+                  'pH',
                   'chemical_makeup',
                   'halogen',
                   'acetonitrile',
@@ -33,6 +35,8 @@ class WasteForm(forms.ModelForm):
         labels = {
             'amount': _('Quantidade?'),
             'unit': _('unidade?'),
+            'is_liquid':_('Estado?'),
+            'solvent_type':_('Caso a solução seja líquida, qual o solvente?'),
             'pH': _('pH'),
             'halogen': _('O resíduo contém halogenados?'),
             'acetonitrile': _('O resíduo contém acetonitrila?'),
@@ -63,14 +67,14 @@ class WasteForm(forms.ModelForm):
             },
         }
         widgets = {
-            'explosive': forms.RadioSelect,
-            'flammable': forms.RadioSelect,
-            'oxidizing': forms.RadioSelect,
-            'under_pressure': forms.RadioSelect,
-            'toxic': forms.RadioSelect,
-            'corrosive': forms.RadioSelect,
-            'health_dangerous': forms.RadioSelect,
-            'pollutant': forms.RadioSelect,
-            'can_agitate': forms.RadioSelect,
+           # 'explosive': forms.RadioSelect,
+           # 'flammable': forms.RadioSelect,
+           # 'oxidizing': forms.RadioSelect,
+           # 'under_pressure': forms.RadioSelect,
+           # 'toxic': forms.RadioSelect,
+           # 'corrosive': forms.RadioSelect,
+           # 'health_dangerous': forms.RadioSelect,
+           # 'pollutant': forms.RadioSelect,
+           # 'can_agitate': forms.RadioSelect,
             'comments': forms.Textarea(attrs={'cols': 30, 'rows': 10}),
         }

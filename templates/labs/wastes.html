@@ -21,6 +21,7 @@
 		</tr>
 		</thead>
 		<tbody>
+		<form id="send-form">
 		{% for waste in my_wastes %}
 			<tr>
 				<th scope="row">{{ waste.chemical_makeup }}</th>
@@ -48,25 +49,78 @@
 					   href="{% url 'bookmark_waste' waste.id %}">
 						<i class="fas fa-star fa-2x text-warning"></i>
 					</a>
-					</form>
 				</td>
 				<td class="text-center">
 					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input big-checkbox"
-						       id="{{ waste.id }}">
-						<label class="custom-control-label" for="{{ waste.id }}">
-						</label>
+
+							<input type="checkbox"
+							       name="send-checkbox-{{ waste.id }}"
+							       class="custom-control-input big-checkbox"
+							       id="{{ waste.id }}">
+							<label class="custom-control-label"
+							       for="{{ waste.id }}">
+							</label>
+
 					</div>
 					<!--A tabela inteira tem q virar um ModelForm -->
 				</td>
 			</tr>
 		{% endfor %}
+		</form>
 		</tbody>
 	</table>
 
 	<h4>
 		<a class="btn btn-primary" href="{% url 'create_waste' %}">Novo
 			Resíduo</a>
+		<button form="send-form" class="btn btn-secondary" type="submit">Enviar Resíduos
+			Selecionados
+		</button>
 	</h4>
+
+	<div class="jumbotron">
+		<h1>Meus Resíduos Favoritos</h1>
+	</div>
+
+	<table class="table table-striped table-responsive-sm">
+		<thead class="thead-dark">
+		<tr>
+			<th scope="col">Resíduo</th>
+			<th scope="col" class="text-center">Copiar</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for bwaste in my_bookmarked_wastes %}
+			<tr>
+				<th scope="row">{{ bwaste.waste.chemical_makeup }}</th>
+				<td class="text-center">
+					<a class="btn btn-info"
+					   href="#">
+						<i class="fas fa-pen fa-2x"></i>
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	<div class="jumbotron">
+		<h1>Meus Resíduos Enviados</h1>
+	</div>
+
+	<table class="table table-striped table-responsive-sm">
+		<thead class="thead-dark">
+		<tr>
+			<th scope="col">Resíduo</th>
+			<th scope="col" class="text-center">Situação</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<th scope="row">...</th>
+			<td class="text-center">...</td>
+		</tr>
+		</tbody>
+	</table>
 
 {% endblock %}
