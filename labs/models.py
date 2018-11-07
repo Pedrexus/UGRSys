@@ -43,7 +43,6 @@ class Waste(models.Model):
     )
     status = models.CharField(max_length=30, choices=STATUS_CHOICES,
                               default=STATUS_1, verbose_name='Status')
-    user_editable = True
 
     generator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   on_delete=models.CASCADE,
@@ -64,8 +63,6 @@ class Waste(models.Model):
     unit = models.CharField(max_length=2, choices=UNITS_CHOICES, default='L',
                             verbose_name='unidade')
 
-    # TODO: existem mais status: inventorio_usuario, pedido pra recolher, recolhido, inventorio degr, processado
-
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
                              blank=True, default=Decimal('7'))
     # TODO: tamanho da embalagem
@@ -75,8 +72,6 @@ class Waste(models.Model):
                                        verbose_name='Composição química')
     # TODO: mudar composição para varios campos
 
-    # deprecated?: o default deve ser vazio e nao pode ser permitido ficar vazio.
-    # deprecated?: checar informações redundantes
     STATE = (
         ('L', 'Líquido'),
         ('S', 'Sólido')
@@ -215,11 +210,6 @@ class Waste(models.Model):
 class BookmarkedWaste(models.Model):
     bookmarked_waste = models.ForeignKey(Waste, on_delete=models.PROTECT,
                                          verbose_name='Resíduo original')
-
-    bookmarked_waste.amount = Decimal('0.000')
-    bookmarked_waste.status = False
-    bookmarked_waste.comments = ''
-    bookmarked_waste.unit = ''
 
     class Meta:
         verbose_name = 'Resíduo Favorito'
