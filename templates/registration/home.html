@@ -10,19 +10,28 @@
 
 {% block main %}
 
-    <h1>Seja Bem Vindo</h1>
+
 
     {% if user.is_authenticated %}
-        <p>Olá, {{ user.username }}</p>
-        <a href="{% url 'logout' %}">Logout</a>
-        <a href="{% url 'user_home' %}">Minha Home</a>
+        <h1 class="text-center">Olá, {{ user.username }}</h1>
+	    <div class="text-center">
+		    <div class="btn-group btn-group-justified btn-group-mg my-btn-group-responsive" role="group" aria-label="Home buttons">
+		            <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+			        <a class="btn btn-primary" href="{% url 'user_home' %}">Minha Home</a>
+			</div>
+	    </div>
     {% else %}
-	    <div class="btn-group btn-group-md" role="group" aria-label="Basic example">
-	            <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
-	            <a class="btn btn-primary" href="{% url 'signup' %}">Cadastro</a>
-	            <a class="btn btn-primary" href="{% url 'reset_password' %}">Esqueci a senha</a>
-                <a class="btn btn-primary" href="/admin"> Administrador </a>
-		</div>
+	    <h1 class="text-center">Seja Bem Vindo</h1>
+	    <div class="text-center">
+		    <div class="btn-group btn-group-justified btn-group-mg my-2">
+		            <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+		            <a class="btn btn-primary" href="{% url 'signup' %}">Cadastro</a>
+			</div>
+	        <div class="btn-group btn-group-justified btn-group-mg my-2" role="group" aria-label="Home buttons">
+		            <a class="btn btn-info" href="{% url 'reset_password' %}">Esqueci a senha</a>
+	                <a class="btn btn-info" href="/admin"> Administrador </a>
+			</div>
+	    </div>
     {% endif %}
 
 {% endblock %}
