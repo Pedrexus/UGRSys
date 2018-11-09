@@ -64,7 +64,7 @@ class Waste(models.Model):
     unit = models.CharField(max_length=2, choices=UNITS_CHOICES, default='L',
                             verbose_name='unidade')
 
-    # TODO: existem mais status: inventorio_usuario, pedido pra recolher, recolhido, inventorio degr, processado
+
 
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
                              blank=True, default=Decimal('7'))
@@ -210,6 +210,7 @@ class Waste(models.Model):
             self.user_editable = True
         else:
             self.user_editable = False
+
 
 
 class BookmarkedWaste(models.Model):

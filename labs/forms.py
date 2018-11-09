@@ -8,7 +8,7 @@ from .models import Waste
 class WasteForm(forms.ModelForm):
     class Meta:
         model = Waste
-        #TODO: colocar os booleanos todos juntos
+
         fields = ('amount',
                   'unit',
                   'is_liquid',

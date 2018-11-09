@@ -122,3 +122,4 @@ def user_wastes_ask_removal(request, waste_id):
         return redirect('user_wastes')
     return render(request, 'labs/waste_ask_removal.html',
                   {'this_waste': waste})
+
