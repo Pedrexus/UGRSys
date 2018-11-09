@@ -24,7 +24,7 @@
 			<form id="send-form">
 				{% for waste in my_wastes_with_me %}
 					<tr>
-						<th scope="row">{{ waste.chemical_makeup }}</th>
+						<th scope="row">{{ waste.chemical_makeup_names }}</th>
 						<td>{{ waste.last_modified_date }}</td>
 						<td class="text-center">
 							<a class="btn btn-info"
@@ -97,7 +97,7 @@
 			<tbody>
 			{% for bwaste in my_bookmarked_wastes %}
 				<tr>
-					<th scope="row">{{ bwaste.waste.chemical_makeup }}</th>
+					<th scope="row">{{ bwaste.waste.chemical_makeup_names }}</th>
 					<td class="text-center">
 						<a class="btn btn-info"
 						   href="#">
@@ -125,7 +125,7 @@
 			<tbody>
 			{% for waste in my_wastes_status_2 %}
 				<tr>
-					<th scope="row">{{ waste.chemical_makeup }}</th>
+					<th scope="row">{{ waste.chemical_makeup_names }}</th>
 					<td class="text-center">{{ waste.get_status_display }}</td>
 				</tr>
 			{% endfor %}

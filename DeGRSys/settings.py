@@ -35,10 +35,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'bootstrapform',
     'registration',
     'labs',
-  # 'dynamicForm',
+    # 'dynamicForm',
 ]
 
 MIDDLEWARE = [
@@ -55,18 +56,18 @@ ROOT_URLCONF = 'DeGRSys.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'BACKEND':  'django.template.backends.django.DjangoTemplates',
+        'DIRS':     [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
-        'OPTIONS': {
+        'OPTIONS':  {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries': {'media':'labelgen.templatetags.media'}
+            'libraries':          {'media': 'labelgen.templatetags.media'}
         },
     },
 ]
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'DeGRSys.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME':   os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -122,7 +123,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
-MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),

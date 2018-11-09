@@ -54,15 +54,18 @@ def user_wastes(request):
 
 @login_required
 def user_wastes_create(request):
-    form = WasteForm(request.POST or None)
+    form = WasteForm(request.POST or None, initial={})
 
     if form.is_valid():
         waste = form.save(commit=False)
 
-        # preenchimento do campo "gerador" baseado no usuário que está logado.
+        # preenchimento de campos baseado em dados de contexto:
         waste.generator = request.user
-        waste.status_update()
         waste.save()
+
+        waste.chemical_makeup.add(*request.POST.getlist('chemical_makeup'))
+        # waste.save()
+
         return redirect('user_wastes')
 
     return render(request, 'labs/waste_form.html', {'waste_form': form})
@@ -83,7 +86,6 @@ def user_wastes_delete(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
     if request.method == 'POST':
         waste.delete()
-        waste.status_update()
         return redirect('user_wastes')
 
     return render(request, 'labs/waste_delete.html', {'this_waste': waste})
@@ -110,15 +112,3 @@ def user_wastes_bookmark(request, waste_id):
         return redirect('user_wastes')
 
     return render(request, 'labs/waste_bookmark.html', {'this_waste': waste})
-
-
-def user_wastes_ask_removal(request, waste_id):
-    waste = get_object_or_404(Waste, pk=waste_id)
-    print('oi')
-    if request.method == 'POST':
-        waste.status = 'waiting_removal'
-        waste.save()
-        print('ola' + waste.status)
-        return redirect('user_wastes')
-    return render(request, 'labs/waste_ask_removal.html',
-                  {'this_waste': waste})
