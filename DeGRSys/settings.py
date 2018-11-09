@@ -38,8 +38,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'widget_tweaks',
-    'bootstrapform',
+    'widget_tweaks',  # https://github.com/jazzband/django-widget-tweaks
+    'bootstrapform',  # https://django-bootstrap-form.readthedocs.io/en/latest/
 ]
 
 PROJECT_APPS = [

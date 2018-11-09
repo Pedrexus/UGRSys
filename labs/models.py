@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.html import format_html
 
 
 class Department(models.Model):
@@ -231,12 +232,12 @@ class Waste(models.Model):
 
     comments = models.TextField(blank=True, verbose_name='Comentários')
 
-
     @property
     def chemical_makeup_names(self):
         return ', '.join([substance.name for substance in
                           self.chemical_makeup.all()])
 
+    chemical_makeup_names.fget.short_description = 'Composição Química'
 
     @property
     def substance_properties(self):
