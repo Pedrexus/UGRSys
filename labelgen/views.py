@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from labs.models import Waste
 from .labels import render_label
 
+import re
 
 @login_required
 def generate_view(request, residuo_id, *args, **kwargs):
@@ -12,6 +13,7 @@ def generate_view(request, residuo_id, *args, **kwargs):
 
     context = {
         "residuo": waste.chemical_makeup,
+         "barcode": barcode_number(waste),
         "nome_gerador": waste.generator,
         "laboratorio": waste.generator.laboratory,
         "telefone": waste.generator.phone_number,
@@ -30,3 +32,9 @@ def generate_view(request, residuo_id, *args, **kwargs):
 #TODO: INCLUIR OPÇÃO PARA OUTROS TAMANHOS DE ETIQUETA
     label = render_label('labelgen/label.html', context)
     return HttpResponse(label, content_type='html')
+
+def barcode_number(waste):
+    #TODO: colocar data e limite de dígitos
+    date = re.sub("\D", "", str(waste.creation_date))[:8] #YYYYMMDD :8
+    return date+str(waste.pk).zfill(6) #preenche até 6 digitos. Quando passar de 1 milhao de resíduos vai quebrar eu conserto.
+

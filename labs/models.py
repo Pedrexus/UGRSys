@@ -3,7 +3,6 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils.html import format_html
 
 
 class Department(models.Model):
@@ -167,6 +166,8 @@ class Waste(models.Model):
     unit = models.CharField(max_length=2, choices=UNITS_CHOICES, default='L',
                             verbose_name='unidade')
 
+
+
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
                              blank=True, default=Decimal('7'))
 
@@ -310,5 +311,19 @@ class Waste(models.Model):
         return s
 
 
+
 class BookmarkedWaste(models.Model):
-    pass
+    bookmarked_waste = models.ForeignKey(Waste, on_delete=models.PROTECT,
+                                         verbose_name='Resíduo original')
+
+    bookmarked_waste.amount = Decimal('0.000')
+    bookmarked_waste.status = False
+    bookmarked_waste.comments = ''
+    bookmarked_waste.unit = ''
+
+    class Meta:
+        verbose_name = 'Resíduo Favorito'
+        verbose_name_plural = 'Resíduos Favoritos'
+
+    def __str__(self):
+        return str.join(['Favorito(', str(self.bookmarked_waste), ')'])

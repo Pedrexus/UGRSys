@@ -1,15 +1,14 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
+#from django.forms import formset_factory
 
 from .models import Waste
-
-
-# from django.forms import formset_factory
 
 
 class WasteForm(forms.ModelForm):
     class Meta:
         model = Waste
+
         fields = ('amount',
                   'unit',
                   'chemical_makeup',
@@ -81,3 +80,4 @@ class WasteForm(forms.ModelForm):
             'chemical_makeup': forms.SelectMultiple(
                 attrs={'style': "display: none"}),
         }
+
