@@ -1,17 +1,13 @@
 import csv
-
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 
-def export_users_csv(request):
+def some_view(request):
+    # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['Username', 'First name', 'Last name', 'Email address'])
-
-    users = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
-    for user in users:
-        writer.writerow(user)
+    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
 
     return response
