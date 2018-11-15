@@ -94,21 +94,21 @@ class Substance(models.Model):
     @property
     def substance_properties(self):
         return {
-            'halogen':          self.halogen,
-            'acetonitrile':     self.acetonitrile,
-            'heavy_metals':     self.heavy_metals,
-            'sulfur':           self.sulfur,
-            'cyanide':          self.cyanide,
-            'amine':            self.amine,
-            'explosive':        self.explosive,
-            'flammable':        self.flammable,
-            'oxidizing':        self.oxidizing,
-            'under_pressure':   self.under_pressure,
-            'toxic':            self.toxic,
-            'corrosive':        self.corrosive,
+            'halogen': self.halogen,
+            'acetonitrile': self.acetonitrile,
+            'heavy_metals': self.heavy_metals,
+            'sulfur': self.sulfur,
+            'cyanide': self.cyanide,
+            'amine': self.amine,
+            'explosive': self.explosive,
+            'flammable': self.flammable,
+            'oxidizing': self.oxidizing,
+            'under_pressure': self.under_pressure,
+            'toxic': self.toxic,
+            'corrosive': self.corrosive,
             'health_dangerous': self.health_dangerous,
-            'pollutant':        self.pollutant,
-            'cannot_agitate':   self.cannot_agitate
+            'pollutant': self.pollutant,
+            'cannot_agitate': self.cannot_agitate
         }
 
     def boolean_to_x(self):
@@ -135,7 +135,7 @@ class Waste(models.Model):
     # Composição química exclusiva:
     chemical_makeup_text = models.CharField(max_length=200,
                                             verbose_name='Composição química extra',
-                                            null=True, blank=True)
+                                            default='', blank=True)
 
     STATUS_1 = 'User inventory'
     STATUS_2 = 'Waiting removal'
@@ -165,8 +165,6 @@ class Waste(models.Model):
     )
     unit = models.CharField(max_length=2, choices=UNITS_CHOICES, default='L',
                             verbose_name='unidade')
-
-
 
     pH = models.DecimalField(max_digits=2, decimal_places=0, null=True,
                              blank=True, default=Decimal('7'))
@@ -226,7 +224,7 @@ class Waste(models.Model):
                                                verbose_name='Dano à saúde',
                                                name='health_dangerous')
     pollutant = models.NullBooleanField(default=False, verbose_name='Poluente',
-                                        name='pollutant')  # THAT'S SILLY
+                                        name='pollutant')
     cannot_agitate = models.NullBooleanField(default=False,
                                              verbose_name='Não pode ser agitado',
                                              name='cannot_agitate')
@@ -235,29 +233,31 @@ class Waste(models.Model):
 
     @property
     def chemical_makeup_names(self):
-        return ', '.join([substance.name for substance in
-                          self.chemical_makeup.all()])
+        main_names = ', '.join(
+            [substance.name for substance in self.chemical_makeup.all()])
+        possible_comma = ', ' if main_names and self.chemical_makeup_text else ''
+        return main_names + possible_comma + str(self.chemical_makeup_text)
 
     chemical_makeup_names.fget.short_description = 'Composição Química'
 
     @property
     def substance_properties(self):
         return {
-            'halogen':          self.halogen,
-            'acetonitrile':     self.acetonitrile,
-            'heavy_metals':     self.heavy_metals,
-            'sulfur':           self.sulfur,
-            'cyanide':          self.cyanide,
-            'amine':            self.amine,
-            'explosive':        self.explosive,
-            'flammable':        self.flammable,
-            'oxidizing':        self.oxidizing,
-            'under_pressure':   self.under_pressure,
-            'toxic':            self.toxic,
-            'corrosive':        self.corrosive,
+            'halogen': self.halogen,
+            'acetonitrile': self.acetonitrile,
+            'heavy_metals': self.heavy_metals,
+            'sulfur': self.sulfur,
+            'cyanide': self.cyanide,
+            'amine': self.amine,
+            'explosive': self.explosive,
+            'flammable': self.flammable,
+            'oxidizing': self.oxidizing,
+            'under_pressure': self.under_pressure,
+            'toxic': self.toxic,
+            'corrosive': self.corrosive,
             'health_dangerous': self.health_dangerous,
-            'pollutant':        self.pollutant,
-            'cannot_agitate':   self.cannot_agitate
+            'pollutant': self.pollutant,
+            'cannot_agitate': self.cannot_agitate
         }
 
     def boolean_to_x(self):
@@ -304,26 +304,29 @@ class Waste(models.Model):
             else:
                 s += '.0'
 
-
         else:
             s += '0'
 
         return s
 
 
-
 class BookmarkedWaste(models.Model):
+    """Meus Resíduos Favoritos
+
+        Um resíduo que poderá ser usado posteriormente pelo usuário. Quando
+    for usado, ele deverá ser carregado em um form sem os campos "amount,
+    unit, comments e status = STATUS_1".
+    """
     bookmarked_waste = models.ForeignKey(Waste, on_delete=models.PROTECT,
                                          verbose_name='Resíduo original')
-
-    bookmarked_waste.amount = Decimal('0.000')
-    bookmarked_waste.status = False
-    bookmarked_waste.comments = ''
-    bookmarked_waste.unit = ''
 
     class Meta:
         verbose_name = 'Resíduo Favorito'
         verbose_name_plural = 'Resíduos Favoritos'
 
     def __str__(self):
-        return str.join(['Favorito(', str(self.bookmarked_waste), ')'])
+        return self.bookmarked_waste.chemical_makeup_names
+
+    @property
+    def chemical_makeup_names(self):
+        return self.bookmarked_waste.chemical_makeup_names

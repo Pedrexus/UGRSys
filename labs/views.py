@@ -41,11 +41,14 @@ def user_stats(request):
 
 @login_required
 def user_wastes(request):
-    data = {'my_wastes_with_me': Waste.objects.filter(
-        generator=request.user, status=Waste.STATUS_1),
-        'my_wastes_status_2':    Waste.objects.filter(generator=request.user,
-                                                      status=Waste.STATUS_2),
-        'my_bookmarked_wastes':  []}
+    data = {
+        'my_wastes_with_me': Waste.objects.filter(
+            generator=request.user, status=Waste.STATUS_1),
+        'my_wastes_status_2': Waste.objects.filter(
+            generator=request.user, status=Waste.STATUS_2),
+        'my_bookmarked_wastes': BookmarkedWaste.objects.filter(
+            bookmarked_waste__generator=request.user),
+    }
 
     update_wastes(request, opt='send')
 
@@ -91,24 +94,40 @@ def user_wastes_delete(request, waste_id):
     return render(request, 'labs/waste_delete.html', {'this_waste': waste})
 
 
-def user_wastes_duplicate(request, waste_id):
-    new_waste = Waste.objects.get(pk=waste_id)
-    new_waste.pk = None
-    new_waste.status = 'user_inventory'
-    new_waste.status_update()
-    new_waste.save()
-
-    return redirect('user_wastes')
-
-
 def user_wastes_bookmark(request, waste_id):
     waste = get_object_or_404(Waste, pk=waste_id)
 
     if request.method == 'POST':
-        bookmarked_waste = BookmarkedWaste.objects.create(
-            bookmarked_waste=waste)
-        bookmarked_waste.save()
+        BookmarkedWaste.objects.create(bookmarked_waste=waste).save()
 
         return redirect('user_wastes')
 
     return render(request, 'labs/waste_bookmark.html', {'this_waste': waste})
+
+
+def user_bookmarked_waste_use(request, waste_id):
+    orig_waste = get_object_or_404(Waste, pk=waste_id)
+
+    orig_waste.amount, orig_waste.unit, orig_waste.comments = .0, '', ''
+    form = WasteForm(request.POST or None, instance=orig_waste)
+
+    if form.is_valid():
+        new_waste = form.save(commit=False)
+        new_waste.pk = None  # preventing waste to be overwritten, aka. cloning it.
+        new_waste.generator = request.user
+        new_waste.save()
+        new_waste.chemical_makeup.add(*request.POST.getlist('chemical_makeup'))
+        return redirect('user_wastes')
+
+    return render(request, 'labs/waste_form.html', {'waste_form': form})
+
+
+def user_bookmarked_waste_delete(request, bwaste_id):
+    bookmarked_waste = get_object_or_404(BookmarkedWaste, pk=bwaste_id)
+
+    if request.method == 'POST':
+        bookmarked_waste.delete()
+        return redirect('user_wastes')
+
+    return render(request, 'labs/waste_delete.html',
+                  {'this_waste': bookmarked_waste})

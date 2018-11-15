@@ -4,7 +4,7 @@
 
 {% block main %}
 
-    <h3>Você confirma que quer favoritar: {{ this_waste.chemical_makeup }}?</h3>
+    <h3>Você confirma que quer favoritar: {{ this_waste.chemical_makeup_names }}?</h3>
 
     <form method="post">
         {% csrf_token %}

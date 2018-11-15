@@ -2,8 +2,8 @@ from django.urls import path
 
 from .views import user_home, user_data, user_stats, user_wastes, \
     user_wastes_create, user_wastes_update, user_wastes_delete, \
-    user_wastes_duplicate, \
-    user_data_update, user_wastes_bookmark
+    user_wastes_bookmark, user_bookmarked_waste_use, \
+    user_bookmarked_waste_delete, user_data_update
 
 urlpatterns = [
     path('user/', user_home, name='user_home'),
@@ -18,6 +18,8 @@ urlpatterns = [
          name='delete_waste'),
     path('meus_residuos/bookmark/<int:waste_id>/', user_wastes_bookmark,
          name='bookmark_waste'),
-    path('meus_residuos/duplicate/<int:waste_id>/', user_wastes_duplicate,
-         name='duplicate_waste'),
+    path('meus_residuos/bookmark/create/<int:waste_id>/',
+         user_bookmarked_waste_use, name='use_bookmarked_waste'),
+    path('meus_residuos/bookmark/delete/<int:bwaste_id>/',
+         user_bookmarked_waste_delete, name='delete_bookmarked_waste'),
 ]
