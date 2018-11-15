@@ -4,6 +4,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
+from registration.models import MyUser
+
 
 class Department(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True,
@@ -125,7 +127,7 @@ class Waste(models.Model):
         verbose_name = 'Resíduo'
         verbose_name_plural = 'Resíduos'
 
-    generator = models.ForeignKey(settings.AUTH_USER_MODEL,
+    generator = models.ForeignKey(MyUser,
                                   on_delete=models.CASCADE,
                                   verbose_name='Gerador')
     # Composição química do banco de dados:

@@ -1,17 +1,16 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from labs.models import Department, Laboratory
 from labs.validators import phone_regex
-from registration.models import MyUser
+from registration.models import MyUser, User
 
 
 class SignUpForm(UserCreationForm):
     full_name = forms.CharField(max_length=50, required=True, help_text='',
                                 label=_('Nome completo'))
-    # TODO: omitir first_name e last_name no admin
-
     department = forms.ModelChoiceField(queryset=Department.objects.all(),
                                         empty_label=None,
                                         label=_('Departamento'))
@@ -27,16 +26,30 @@ class SignUpForm(UserCreationForm):
             'Campo Obrigatório. Informe um número de telefone para contato.'),
                                    label=_('Contato'))
 
-    class Meta:
-        model = MyUser
-        fields = ('username',
-                  'full_name', 'department', 'laboratory',
-                  'email', 'phone_number',
-                  'password1', 'password2')
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data.get('email')
+        user.save()
+
+        my_user = MyUser.objects.create(
+            user=user,
+            full_name=self.cleaned_data.get('full_name'),
+            department=self.cleaned_data.get('department'),
+            laboratory=self.cleaned_data.get('laboratory'),
+            email=self.cleaned_data.get('email'),
+            phone_number=self.cleaned_data.get('phone_number'),
+        )
+        if commit:
+            my_user.save()
+
+        return my_user
 
 
 class UpdateMyUserForm(forms.ModelForm):
-    #TODO: por que nao pode atualizar o email?
     full_name = forms.CharField(max_length=50, required=True, help_text='',
                                 label=_('Nome completo'))
     department = forms.ModelChoiceField(queryset=Department.objects.all(),

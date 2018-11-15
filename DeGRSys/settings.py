@@ -49,6 +49,8 @@ PROJECT_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -92,7 +94,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-AUTH_USER_MODEL = 'registration.MyUser'
+AUTH_USER_MODEL = 'registration.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -138,5 +140,3 @@ STATICFILES_DIRS = (
 LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = 'user_home'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

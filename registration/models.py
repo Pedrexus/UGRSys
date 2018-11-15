@@ -1,10 +1,28 @@
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from django.conf import settings
 from labs.validators import phone_regex
 
 
-class MyUser(AbstractUser):
+class User(AbstractUser):
+    pass
+
+
+class MyUser(models.Model):
+    USERNAME_FIELD = 'user.username'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = (
+        'user',
+        'full_name',
+        'department',
+        'laboratory',
+        'email',
+        'phone_number')
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                primary_key=True)
     full_name = models.CharField(max_length=50, verbose_name='Nome completo')
     department = models.ForeignKey('labs.Department', on_delete=models.CASCADE,
                                    verbose_name='Departamento')

@@ -23,26 +23,27 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
+            my_user = form.save(commit=False)
+            my_user.user.is_active = False
 
-            user.save()
+            my_user.save()
             current_site = get_current_site(request)
 
             message = render_to_string(
                 'registration/account_activation_email.html', {
-                    'user': user,
+                    'user': my_user.user,
                     'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(
+                    'uid': urlsafe_base64_encode(
+                        force_bytes(my_user.pk)).decode(
                         "utf-8"),
-                    'token': account_activation_token.make_token(user),
+                    'token': account_activation_token.make_token(my_user),
                 })
 
             subject = 'Activate Your MySite Account'
-            user.email_user(subject, message)
+            my_user.user.email_user(subject, message)
 
             return render(request, 'registration/account_activation_sent.html',
-                          {'user': user})
+                          {'user': my_user.user})
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -51,14 +52,19 @@ def signup(request):
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = MyUser.objects.get(pk=uid)
+        my_user = MyUser.objects.get(pk=uid)
+        user = my_user.user
     except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
+        my_user = None
         user = None
 
-    if user is not None and account_activation_token.check_token(user, token):
+    if user is not None and account_activation_token.check_token(my_user, token):
         user.is_active = True
-        user.email_confirmed = True
         user.save()
+
+        my_user.email_confirmed = True
+        my_user.save()
+
         login(request, user)
         return redirect('user_home')
     else:

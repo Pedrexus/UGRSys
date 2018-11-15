@@ -8,7 +8,7 @@ def update_wastes(request, opt='send'):
 
 def update_wastes_send(request):
     my_wastes_ids = [str(waste.id) for waste in Waste.objects.filter(
-        generator=request.user, status=Waste.STATUS_1)]
+        generator__user=request.user, status=Waste.STATUS_1)]
     send_wastes = {key: bool(request.GET.get(key, None)) for key in
                    my_wastes_ids}
 

@@ -15,21 +15,24 @@ def user_home(request):
 
 @login_required
 def user_data(request):
-    data = {'this_user': request.user, 'user_model': MyUser}
+    data = {
+        'this_user': MyUser.objects.get(user=request.user),
+        'user_model': MyUser
+    }
 
     return render(request, 'labs/data.html', data)
 
 
 @login_required
 def user_data_update(request):
-    user = request.user
-    form = UpdateMyUserForm(request.POST or None, instance=user)
+    my_user = MyUser.objects.get(user=request.user)
+    form = UpdateMyUserForm(request.POST or None, instance=my_user)
 
     if form.is_valid():
-        user.save()
+        my_user.save()
         return redirect('user_data')
 
-    data = {'this_user': user, 'form': form}
+    data = {'this_user': my_user, 'form': form}
     return render(request, 'labs/data_form.html', data)
 
 
@@ -41,13 +44,14 @@ def user_stats(request):
 
 @login_required
 def user_wastes(request):
+    Waste.objects.filter()
     data = {
         'my_wastes_with_me': Waste.objects.filter(
-            generator=request.user, status=Waste.STATUS_1),
+            generator__user=request.user, status=Waste.STATUS_1),
         'my_wastes_status_2': Waste.objects.filter(
-            generator=request.user, status=Waste.STATUS_2),
+            generator__user=request.user, status=Waste.STATUS_2),
         'my_bookmarked_wastes': BookmarkedWaste.objects.filter(
-            bookmarked_waste__generator=request.user),
+            bookmarked_waste__generator__user=request.user),
     }
 
     update_wastes(request, opt='send')
@@ -63,7 +67,7 @@ def user_wastes_create(request):
         waste = form.save(commit=False)
 
         # preenchimento de campos baseado em dados de contexto:
-        waste.generator = request.user
+        waste.generator = MyUser.objects.get(user=request.user)
         waste.save()
 
         waste.chemical_makeup.add(*request.POST.getlist('chemical_makeup'))
@@ -114,7 +118,7 @@ def user_bookmarked_waste_use(request, waste_id):
     if form.is_valid():
         new_waste = form.save(commit=False)
         new_waste.pk = None  # preventing waste to be overwritten, aka. cloning it.
-        new_waste.generator = request.user
+        new_waste.generator = MyUser.objects.get(user=request.user)
         new_waste.save()
         new_waste.chemical_makeup.add(*request.POST.getlist('chemical_makeup'))
         return redirect('user_wastes')
