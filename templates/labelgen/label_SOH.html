@@ -1,4 +1,4 @@
-{% load static %}
+<!{% load static %}
 
 <html>
 <head>
@@ -130,16 +130,25 @@
 				<img src="/media/DeGR.jpg" alt="Logo DeGR"
 				     style="height:2cm">
 			</th>
+
 			<th class="tg-cabecalho" colspan="3">
 				<font size="+2"> DeGR </font><br>
 				<font> Departamento de Gestão de Resíduos <br>
 					(16)3351-8015 degr@ufscar.br</font>
 			</th>
+
 			<th class="tg-cabecalho" colspan="1">
 				<img src="/media/logo_ufscar.png" alt="Logo UFSCar"
 				     style="height:2cm">
 			</th>
 
+		</tr>
+		<tr>
+			<th class="tg-cabecalho" colspan="5">
+				<font size="+2"> SOLVENTE ORGÂNICO HALOGENADO </font><br>
+                <font size="+1">Tratamento por incineração &U+1F525</font>
+
+				</th>
 		</tr>
 
 		<tr>
@@ -154,37 +163,30 @@
 				Departamento de Pesquisa<br></td>
 		</tr>
 
+
 		<tr>
-			<td class="tg-basic" colspan="4">pH: {{ pH }}</td>
-			<td class="tg-inventory_location" rowspan="5"><span
+			<td class="tg-basic-centered" colspan="4">O resíduo contém:<br>
+			</td>
+			<td class="tg-inventory_location" rowspan="3"><span
 					style="font-weight:bold">{{ inventory_location }}</span>
 			</td>
 		</tr>
 
 		<tr>
-			<td class="tg-basic-centered" colspan="4">O resíduo contém:<br>
-			</td>
+			<td class="tg-basic">Inflamavel</td>
+			<td class="tg-check">{{ inflamable_check }}</td>
+			<td class="tg-basic-large">Corrosivo</td>
+			<td class="tg-check">{{ corrosive_check }} </td>
 		</tr>
 
 		<tr>
-			<td class="tg-basic">Halogenados</td>
-			<td class="tg-check">{{ halogen_check }}</td>
-			<td class="tg-basic-large">Enxofre ou substâncias sulfuradas</td>
-			<td class="tg-check">{{ sulfur_check }} </td>
+			<td class="tg-basic">Tóxico</td>
+			<td class="tg-check">{{ toxic_check }}</td>
+			<td class="tg-basic">Reativo</td>
+			<td class="tg-check">{{ reactive_check }}</td>
 		</tr>
-
 		<tr>
-			<td class="tg-basic">Acetonitrila</td>
-			<td class="tg-check">{{ acetonitrile_check }}</td>
-			<td class="tg-basic">Geradores de cianeto</td>
-			<td class="tg-check">{{ cyanide_check }}</td>
-		</tr>
 
-		<tr>
-			<td class="tg-basic">Metais Pesados</td>
-			<td class="tg-check">{{ heavy_metals_check }}</td>
-			<td class="tg-basic">Aminas</td>
-			<td class="tg-check">{{ amine_check }}</td>
 		</tr>
 
 		<tr>
