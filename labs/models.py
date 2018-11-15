@@ -7,7 +7,7 @@ from django.db import models
 
 class Department(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True,
-                            verbose_name='Nome do Departamento')
+                            verbose_name='Nome do Departamento', unique=True)
 
     class Meta:
         verbose_name = 'Departamento'
@@ -19,7 +19,7 @@ class Department(models.Model):
 
 class Laboratory(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True,
-                            verbose_name='Nome do Laboratório')
+                            verbose_name='Nome do Laboratório', unique=True)
 
     class Meta:
         verbose_name = 'Laboratório'
@@ -36,7 +36,7 @@ class SubstanceName(models.Model):
 
     # Nome do composto químico:
     name = models.CharField(max_length=200,
-                            verbose_name='Nome')
+                            verbose_name='Nome', unique=True)
 
     def __str__(self):
         return self.name
