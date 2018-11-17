@@ -13,22 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
-from labs import urls as labs_urls
-from registration import urls as home_urls
-from labelgen import urls as labelgen_urls
+from django.contrib import admin
+from django.urls import path, include
 
 # from dynamicForm import urls as dynamic_urls
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('labs/', include(labs_urls)),
-                  path('', include(home_urls)),
-                  path('label/', include(labelgen_urls)),
+                  path('', include('registration.urls')),
+                  path('labs/', include('labs.urls')),
+                  path('label/', include('labelgen.urls')),
+                  path('statistics/', include('stats.urls')),
 
               ] + static(settings.STATIC_URL,
                          document_root=settings.STATIC_ROOT) + \

@@ -43,8 +43,9 @@ THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APPS = [
-    'registration',
-    'labs',
+    'registration.apps.HomeConfig',
+    'labs.apps.LabsConfig',
+    'stats.apps.StatsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS

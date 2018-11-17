@@ -5,7 +5,7 @@ from labs.waste_status import update_wastes
 from registration.forms import UpdateMyUserForm
 from registration.models import MyUser
 from .forms import WasteForm
-from .models import Waste, BookmarkedWaste
+from .models import Waste
 
 
 @login_required
