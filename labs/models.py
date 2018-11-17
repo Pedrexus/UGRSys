@@ -143,12 +143,14 @@ class Waste(models.Model):
     STATUS_2 = 'Waiting removal'
     STATUS_3 = 'DeGR inventory'
     STATUS_4 = 'Neutralized'
+    STATUS_BOOKMARK = 'Bookmarked'
 
     STATUS_CHOICES = (
         (STATUS_1, 'Com usuário'),
         (STATUS_2, 'Aguardando retirada'),
         (STATUS_3, 'Inventório DeGR'),
         (STATUS_4, 'Neutralizado'),
+        (STATUS_BOOKMARK, 'Favorito'),
     )
     status = models.CharField(max_length=30, choices=STATUS_CHOICES,
                               default=STATUS_1, verbose_name='Status')
@@ -269,7 +271,6 @@ class Waste(models.Model):
         return ': '.join(
             [self.generator.full_name, self.chemical_makeup_names])
 
-    # TODO: adicionar localização no estoque e talvez data de produção.
     def inventory_label(self):
         s = ''
 
@@ -310,25 +311,3 @@ class Waste(models.Model):
             s += '0'
 
         return s
-
-
-class BookmarkedWaste(models.Model):
-    """Meus Resíduos Favoritos
-
-        Um resíduo que poderá ser usado posteriormente pelo usuário. Quando
-    for usado, ele deverá ser carregado em um form sem os campos "amount,
-    unit, comments e status = STATUS_1".
-    """
-    bookmarked_waste = models.ForeignKey(Waste, on_delete=models.PROTECT,
-                                         verbose_name='Resíduo original')
-
-    class Meta:
-        verbose_name = 'Resíduo Favorito'
-        verbose_name_plural = 'Resíduos Favoritos'
-
-    def __str__(self):
-        return self.bookmarked_waste.chemical_makeup_names
-
-    @property
-    def chemical_makeup_names(self):
-        return self.bookmarked_waste.chemical_makeup_names

@@ -44,14 +44,13 @@ def user_stats(request):
 
 @login_required
 def user_wastes(request):
-    Waste.objects.filter()
     data = {
         'my_wastes_with_me': Waste.objects.filter(
             generator__user=request.user, status=Waste.STATUS_1),
         'my_wastes_status_2': Waste.objects.filter(
             generator__user=request.user, status=Waste.STATUS_2),
-        'my_bookmarked_wastes': BookmarkedWaste.objects.filter(
-            bookmarked_waste__generator__user=request.user),
+        'my_bookmarked_wastes': Waste.objects.filter(
+            generator__user=request.user, status=Waste.STATUS_BOOKMARK),
     }
 
     update_wastes(request, opt='send')
@@ -99,14 +98,17 @@ def user_wastes_delete(request, waste_id):
 
 
 def user_wastes_bookmark(request, waste_id):
-    waste = get_object_or_404(Waste, pk=waste_id)
+    original_waste = get_object_or_404(Waste, pk=waste_id)
+    chemical_makeup = original_waste.chemical_makeup.all()
 
-    if request.method == 'POST':
-        BookmarkedWaste.objects.create(bookmarked_waste=waste).save()
+    # preventing waste to be overwritten, aka. cloning it.
+    bookmarked_waste = original_waste
+    bookmarked_waste.pk = None
+    bookmarked_waste.status = Waste.STATUS_BOOKMARK
+    bookmarked_waste.save()
+    bookmarked_waste.chemical_makeup.add(*chemical_makeup)
 
-        return redirect('user_wastes')
-
-    return render(request, 'labs/waste_bookmark.html', {'this_waste': waste})
+    return redirect('user_wastes')
 
 
 def user_bookmarked_waste_use(request, waste_id):
@@ -117,7 +119,8 @@ def user_bookmarked_waste_use(request, waste_id):
 
     if form.is_valid():
         new_waste = form.save(commit=False)
-        new_waste.pk = None  # preventing waste to be overwritten, aka. cloning it.
+        new_waste.pk = None  # preventing bookmark to be overwritten.
+        new_waste.status = Waste.STATUS_1
         new_waste.generator = MyUser.objects.get(user=request.user)
         new_waste.save()
         new_waste.chemical_makeup.add(*request.POST.getlist('chemical_makeup'))
@@ -126,8 +129,8 @@ def user_bookmarked_waste_use(request, waste_id):
     return render(request, 'labs/waste_form.html', {'waste_form': form})
 
 
-def user_bookmarked_waste_delete(request, bwaste_id):
-    bookmarked_waste = get_object_or_404(BookmarkedWaste, pk=bwaste_id)
+def user_bookmarked_waste_delete(request, waste_id):
+    bookmarked_waste = get_object_or_404(Waste, pk=waste_id)
 
     if request.method == 'POST':
         bookmarked_waste.delete()
