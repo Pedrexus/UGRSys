@@ -21,7 +21,7 @@ class Evaluation(models.Model):
     )
 
     waste = models.OneToOneField('labs.Waste', on_delete=models.CASCADE,
-                                 primary_key=True)
+                                 primary_key=True, verbose_name='Resíduo')
 
     in_accordance_with_description = models.CharField(
         max_length=15,

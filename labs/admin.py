@@ -3,15 +3,10 @@ from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from .models import Waste, Laboratory, Department, Substance, SubstanceName
+from .models import Waste, Laboratory, Department
 
 admin.site.register(Laboratory)
 admin.site.register(Department)
-
-
-@admin.register(SubstanceName, Substance)
-class SubstanceAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(Waste)
@@ -24,7 +19,7 @@ class WasteAdmin(admin.ModelAdmin):
     list_display = ('generator', 'view_amount_with_unit',
                     'chemical_makeup_names', 'chemical_makeup_text',
                     'status')
-    # list_display_links = None
+    list_display_links = None
     # list_editable = ('status',)
     list_filter = ('status', 'generator',)
     filter_horizontal = ('chemical_makeup',)

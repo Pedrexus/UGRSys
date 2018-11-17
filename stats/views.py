@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 from labs.models import Waste
 from stats.forms import EvaluationForm
@@ -6,7 +6,7 @@ from stats.forms import EvaluationForm
 
 def evaluate_wastes(request, queryset_ids):
     queryset_pks = queryset_ids.split(',')
-    queryset = get_object_or_404(Waste, pk__in=queryset_pks)
+    queryset = Waste.objects.filter(pk__in=queryset_pks)
     # it must be an iterable:
     queryset = [queryset] if isinstance(queryset, Waste) else queryset
 
