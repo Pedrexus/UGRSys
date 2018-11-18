@@ -8,11 +8,15 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 """
 
 import os
+import sys
 
-# allow django to serve static files
 from dj_static import Cling
 from django.core.wsgi import get_wsgi_application
 
+sys.path.append('/opt/bitnami/apps/django/django_projects/DeGRSys')
+os.environ.setdefault("PYTHON_EGG_CACHE", "/opt/bitnami/apps/django/django_projects/DeGRSys/egg_cache")
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DeGRSys.settings')
 
+# allow django to serve static files
 application = Cling(get_wsgi_application())
