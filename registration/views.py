@@ -1,6 +1,7 @@
+from django.conf import settings
+from django.contrib.auth import logout, login
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout, login
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -39,8 +40,9 @@ def signup(request):
                     'token': account_activation_token.make_token(my_user),
                 })
 
-            subject = 'Activate Your MySite Account'
-            my_user.user.email_user(subject, message)
+            subject = 'Ative sua conta no DeGRSys.ga'
+            my_user.user.email_user(subject, message,
+                                    from_email=settings.PROJECT_EMAIL)
 
             return render(request, 'registration/account_activation_sent.html',
                           {'user': my_user.user})

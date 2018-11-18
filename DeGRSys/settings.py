@@ -54,8 +54,6 @@ PROJECT_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,7 +96,7 @@ DATABASES = {
       'HOST': '/opt/bitnami/postgresql',
       'PORT': '5432',
       'USER': 'postgres',
-      'PASSWORD': 'PASSWORD'
+      'PASSWORD': config('POSTGRES_PASSWORD')
   }
 }
 
@@ -139,10 +137,17 @@ USE_TZ = True
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-production')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'user_home'
+
+PROJECT_EMAIL = 'noreply@degrsys.ga'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = config('SENDGRID_PASSWORD')
+EMAIL_USE_TLS = True
