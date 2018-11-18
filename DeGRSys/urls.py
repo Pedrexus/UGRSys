@@ -21,12 +21,16 @@ from django.urls import path, include
 # from dynamicForm import urls as dynamic_urls
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('', include('registration.urls')),
-                  path('labs/', include('labs.urls')),
-                  path('label/', include('labelgen.urls')),
-                  path('statistics/', include('stats.urls')),
+    path('admin/', admin.site.urls),
+    path('', include('registration.urls')),
+    path('labs/', include('labs.urls')),
+    path('label/', include('labelgen.urls')),
+    path('statistics/', include('stats.urls')),
 
-              ] + static(settings.STATIC_URL,
-                         document_root=settings.STATIC_ROOT) + \
-              static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
