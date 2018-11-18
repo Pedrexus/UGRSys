@@ -1,9 +1,7 @@
 from decimal import Decimal
 
-from django.contrib.auth.models import User
 from django.db import models
 
-from registration.models import MyUser
 from substances.models import SubstanceName, Substance, Properties
 
 
@@ -36,7 +34,7 @@ class Waste(models.Model):
         verbose_name = 'Resíduo'
         verbose_name_plural = 'Resíduos'
 
-    generator = models.ForeignKey(MyUser,
+    generator = models.ForeignKey('registration.MyUser',
                                   on_delete=models.CASCADE,
                                   verbose_name='Gerador')
     # Composição química do banco de dados:
