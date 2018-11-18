@@ -17,7 +17,7 @@ sys.path.append('/opt/bitnami/apps/django/django_projects/DeGRSys')
 os.environ.setdefault("PYTHON_EGG_CACHE", "/opt/bitnami/apps/django/django_projects/DeGRSys/egg_cache")
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'DeGRSys.settings'
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DeGRSys.settings')
+#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DeGRSys.settings')
 
 # allow django to serve static files
 application = Cling(get_wsgi_application())
