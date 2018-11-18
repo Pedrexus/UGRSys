@@ -10,18 +10,11 @@ def export_as_csv(modeladmin, request, queryset):
 
     return csv_view(request, data)
 
+admin.site.unregister(Group)
+
 @admin.register(MyUser)
 class MyUserAdmin(admin.ModelAdmin):
     actions = [export_as_csv, ]
-
-
-
-
-admin.site.unregister(Group)
-
-
-@admin.register(MyUser)
-class MyUserAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'full_name',
