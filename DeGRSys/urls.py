@@ -21,11 +21,13 @@ from django.conf.urls.static import static
 from labs import urls as labs_urls
 from registration import urls as home_urls
 from labelgen import urls as labelgen_urls
+#from admin import admin_site.urls
 
 # from dynamicForm import urls as dynamic_urls
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
+#                  path('myadmin/', admin_site.urls)
                   path('labs/', include(labs_urls)),
                   path('', include(home_urls)),
                   path('label/', include(labelgen_urls)),
