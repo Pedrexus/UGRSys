@@ -1,13 +1,28 @@
 from django.contrib import admin
+
+from django.utils.html import format_html
+from .reports import csv_view, xlsx_view
+
 from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .models import Waste, Laboratory, Department
 
+
 admin.site.register(Laboratory)
 admin.site.register(Department)
 
+def export_as_csv(modeladmin, request, queryset):
+    return csv_view(request, queryset)
+
+def lab_export_as_csv(modeladmin, request, queryset):
+    #generators = queryset.objects.get()
+    return csv_view(request, queryset)
+
+
+def export_as_xlsx(modeladmin, request, queryset):
+    return xlsx_view(request, queryset)
 
 @admin.register(Waste)
 class WasteAdmin(admin.ModelAdmin):
@@ -19,6 +34,9 @@ class WasteAdmin(admin.ModelAdmin):
     list_display = ('generator', 'view_amount_with_unit',
                     'chemical_makeup_names', 'chemical_makeup_text',
                     'status')
+
+    actions = [export_as_csv, export_as_xlsx]
+
     list_display_links = None
     # list_editable = ('status',)
     list_filter = ('status', 'generator',)
@@ -28,11 +46,15 @@ class WasteAdmin(admin.ModelAdmin):
         queryset = super(WasteAdmin, self).get_queryset(request)
         return queryset.exclude(status=Waste.STATUS_BOOKMARK)
 
+
     def view_amount_with_unit(self, obj):
         return str(float(obj.amount)) + ' ' + obj.unit
 
     view_amount_with_unit.short_description = Waste._meta.get_field(
         "amount").verbose_name.title()
+
+class LaboratoryAdmin(admin.ModelAdmin):
+    actions = [lab_export_as_csv, ]
 
     def evaluate_wastes(self, request, queryset):
         wastes_1 = queryset.filter(status=Waste.STATUS_1)
@@ -64,3 +86,4 @@ class WasteAdmin(admin.ModelAdmin):
             )
 
     evaluate_wastes.short_description = "Avaliar resíduos"
+
