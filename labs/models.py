@@ -1,10 +1,10 @@
 from decimal import Decimal
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
 from registration.models import MyUser
+from substances.models import SubstanceName, Substance, Properties
 
 
 class Department(models.Model):
@@ -31,97 +31,6 @@ class Laboratory(models.Model):
         return self.name
 
 
-class SubstanceName(models.Model):
-    class Meta:
-        verbose_name = 'Substância - Nome'
-        verbose_name_plural = 'Substâncias -  Nomes'
-
-    # Nome do composto químico:
-    name = models.CharField(max_length=200,
-                            verbose_name='Nome', unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Substance(models.Model):
-    class Meta:
-        verbose_name = 'Substância'
-        verbose_name_plural = 'Substâncias'
-
-    # Nome do composto químico:
-    name = models.OneToOneField(SubstanceName, on_delete=models.CASCADE,
-                                verbose_name='Nome da substância')
-
-    halogen = models.BooleanField(default=False, verbose_name='Halogenados',
-                                  name='halogen')
-    acetonitrile = models.BooleanField(default=False,
-                                       verbose_name='Acetonitrilas',
-                                       name='acetonitrile')
-    heavy_metals = models.BooleanField(default=False,
-                                       verbose_name='Metais pesados',
-                                       name='heavy_metals')
-    sulfur = models.BooleanField(default=False, verbose_name='Sulfurados',
-                                 name='sulfur')
-    cyanide = models.BooleanField(default=False,
-                                  verbose_name='Geradores de cianeto',
-                                  name='cyanide')
-    amine = models.BooleanField(default=False, verbose_name='Aminas',
-                                name='amine')
-    explosive = models.BooleanField(default=False, verbose_name='Explosivo',
-                                    name='explosive')
-    flammable = models.BooleanField(default=False, verbose_name='Inflamável',
-                                    name='flammable')
-    oxidizing = models.BooleanField(default=False, verbose_name='Oxidante',
-                                    name='oxidizing')
-    under_pressure = models.BooleanField(default=False,
-                                         verbose_name='Sob pressão',
-                                         name='under_pressure')
-    toxic = models.BooleanField(default=False, verbose_name='Tóxico',
-                                name='toxic')
-    corrosive = models.BooleanField(default=False, verbose_name='Corrosivo',
-                                    name='corrosive')
-    health_dangerous = models.BooleanField(default=False,
-                                           verbose_name='Dano à saúde',
-                                           name='health_dangerous')
-    pollutant = models.BooleanField(default=False, verbose_name='Poluente',
-                                    name='pollutant')
-    cannot_agitate = models.BooleanField(default=False,
-                                         verbose_name='Não pode ser agitado',
-                                         name='cannot_agitate')
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def substance_properties(self):
-        return {
-            'halogen': self.halogen,
-            'acetonitrile': self.acetonitrile,
-            'heavy_metals': self.heavy_metals,
-            'sulfur': self.sulfur,
-            'cyanide': self.cyanide,
-            'amine': self.amine,
-            'explosive': self.explosive,
-            'flammable': self.flammable,
-            'oxidizing': self.oxidizing,
-            'under_pressure': self.under_pressure,
-            'toxic': self.toxic,
-            'corrosive': self.corrosive,
-            'health_dangerous': self.health_dangerous,
-            'pollutant': self.pollutant,
-            'cannot_agitate': self.cannot_agitate
-        }
-
-    def boolean_to_x(self):
-        substance_properties = self.substance_properties
-
-        property_checks = {name: (lambda x: 'X' if x else ' ')(boolean) for
-                           name, boolean in substance_properties.items()}
-
-        return property_checks
-
-
 class Waste(models.Model):
     class Meta:
         verbose_name = 'Resíduo'
@@ -143,12 +52,14 @@ class Waste(models.Model):
     STATUS_2 = 'Waiting removal'
     STATUS_3 = 'DeGR inventory'
     STATUS_4 = 'Neutralized'
+    STATUS_BOOKMARK = 'Bookmarked'
 
     STATUS_CHOICES = (
         (STATUS_1, 'Com usuário'),
         (STATUS_2, 'Aguardando retirada'),
         (STATUS_3, 'Inventório DeGR'),
         (STATUS_4, 'Neutralizado'),
+        (STATUS_BOOKMARK, 'Favorito'),
     )
     status = models.CharField(max_length=30, choices=STATUS_CHOICES,
                               default=STATUS_1, verbose_name='Status')
@@ -244,32 +155,17 @@ class Waste(models.Model):
 
     @property
     def substance_properties(self):
-        return {
-            'halogen': self.halogen,
-            'acetonitrile': self.acetonitrile,
-            'heavy_metals': self.heavy_metals,
-            'sulfur': self.sulfur,
-            'cyanide': self.cyanide,
-            'amine': self.amine,
-            'explosive': self.explosive,
-            'flammable': self.flammable,
-            'oxidizing': self.oxidizing,
-            'under_pressure': self.under_pressure,
-            'toxic': self.toxic,
-            'corrosive': self.corrosive,
-            'health_dangerous': self.health_dangerous,
-            'pollutant': self.pollutant,
-            'cannot_agitate': self.cannot_agitate
-        }
+        return Properties.substance_properties(self)
 
     def boolean_to_x(self):
-        return Substance.boolean_to_x(self)
+        return Properties.boolean_to_x(
+            substance_properties=self.substance_properties
+        )
 
     def __str__(self):
         return ': '.join(
             [self.generator.full_name, self.chemical_makeup_names])
 
-    # TODO: adicionar localização no estoque e talvez data de produção.
     def inventory_label(self):
         s = ''
 
@@ -310,25 +206,3 @@ class Waste(models.Model):
             s += '0'
 
         return s
-
-
-class BookmarkedWaste(models.Model):
-    """Meus Resíduos Favoritos
-
-        Um resíduo que poderá ser usado posteriormente pelo usuário. Quando
-    for usado, ele deverá ser carregado em um form sem os campos "amount,
-    unit, comments e status = STATUS_1".
-    """
-    bookmarked_waste = models.ForeignKey(Waste, on_delete=models.PROTECT,
-                                         verbose_name='Resíduo original')
-
-    class Meta:
-        verbose_name = 'Resíduo Favorito'
-        verbose_name_plural = 'Resíduos Favoritos'
-
-    def __str__(self):
-        return self.bookmarked_waste.chemical_makeup_names
-
-    @property
-    def chemical_makeup_names(self):
-        return self.bookmarked_waste.chemical_makeup_names

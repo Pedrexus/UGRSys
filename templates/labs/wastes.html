@@ -74,7 +74,7 @@
         <a class="btn btn-primary my-1" href="{% url 'create_waste' %}">Novo
             Resíduo</a>
         {% if my_wastes_with_me %}
-            <button form="send-form my-1" class="btn btn-secondary" type="submit">
+            <button form="send-form" class="btn btn-secondary my-1" type="submit">
                 Enviar
                 Resíduos
                 Selecionados
@@ -98,10 +98,10 @@
             <tbody>
             {% for bwaste in my_bookmarked_wastes %}
                 <tr>
-                    <th scope="row">{{ bwaste }}</th>
+                    <th scope="row">{{ bwaste.chemical_makeup_names }}</th>
                     <td class="text-center">
                         <a class="btn btn-info"
-                           href="{% url 'use_bookmarked_waste' bwaste.bookmarked_waste.id %}">
+                           href="{% url 'use_bookmarked_waste' bwaste.id %}">
                             <i class="far fa-arrow-alt-circle-up fa-2x"></i>
                         </a>
                     </td>

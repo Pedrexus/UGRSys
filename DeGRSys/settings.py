@@ -43,8 +43,10 @@ THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APPS = [
-    'registration',
-    'labs',
+    'registration.apps.HomeConfig',
+    'labs.apps.LabsConfig',
+    'substances.apps.SubstancesConfig',
+    'stats.apps.StatsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -128,15 +130,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-LOGIN_URL = '/login/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'user_home'

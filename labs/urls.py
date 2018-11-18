@@ -18,8 +18,8 @@ urlpatterns = [
          name='delete_waste'),
     path('meus_residuos/bookmark/<int:waste_id>/', user_wastes_bookmark,
          name='bookmark_waste'),
-    path('meus_residuos/bookmark/create/<int:waste_id>/',
+    path('meus_residuos/bookmark/use/<int:waste_id>/',
          user_bookmarked_waste_use, name='use_bookmarked_waste'),
-    path('meus_residuos/bookmark/delete/<int:bwaste_id>/',
+    path('meus_residuos/bookmark/delete/<int:waste_id>/',
          user_bookmarked_waste_delete, name='delete_bookmarked_waste'),
 ]
