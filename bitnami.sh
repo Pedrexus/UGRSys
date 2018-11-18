@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-#!inicalmente, eh preciso criar o arquivo .env
+
+#!1. sudo git -b v1.0 --single-branch https://github.com/Pedrexus/UGRSys.git
+#!2. sudo mv UGRSys/ DeGRSys/
+#!3. sudo touch DeGRSys/.env
+#!4. sudo nano DeGRSys/.env -> copiar parâmetros
+
 sudo python3 manage.py makemigrations
 sudo python3 manage.py migrate
 sudo python3 manage.py migrate --run-syncdb
