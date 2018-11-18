@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#!1. sudo git -b v1.0 --single-branch https://github.com/Pedrexus/UGRSys.git
+#!1. sudo git clone -b v1.0 --single-branch https://github.com/Pedrexus/UGRSys.git
 #!2. sudo mv UGRSys/ DeGRSys/
 #!3. sudo touch DeGRSys/.env
 #!4. sudo nano DeGRSys/.env -> copiar parâmetros

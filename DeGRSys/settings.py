@@ -27,7 +27,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['10.158.0.2', '35.199.100.56', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['10.158.0.2', '35.199.100.56', '127.0.0.1',
+                 'localhost', 'degrsys.ga']
 
 # Application definition
 
