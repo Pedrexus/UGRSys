@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import platform
 
 from decouple import config
 from dj_database_url import parse as dburl
@@ -88,18 +89,25 @@ WSGI_APPLICATION = 'DeGRSys.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-# default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 
-DATABASES = {
-  'default': {
-      'ENGINE': 'django.db.backends.postgresql_psycopg2',
-      'NAME': 'djangostack',
-      'HOST': '/opt/bitnami/postgresql',
-      'PORT': '5432',
-      'USER': 'postgres',
-      'PASSWORD': config('POSTGRES_PASSWORD')
-  }
-}
+if 'django' in platform.node():
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'djangostack',
+            'HOST': '/opt/bitnami/postgresql',
+            'PORT': '5432',
+            'USER': 'postgres',
+            'PASSWORD': config('POSTGRES_PASSWORD')
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
