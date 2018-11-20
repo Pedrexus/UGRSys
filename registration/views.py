@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import logout, login
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
@@ -60,7 +61,8 @@ def activate(request, uidb64, token):
         my_user = None
         user = None
 
-    if user is not None and account_activation_token.check_token(my_user, token):
+    if user is not None and account_activation_token.check_token(my_user,
+                                                                 token):
         user.is_active = True
         user.save()
 
@@ -75,3 +77,19 @@ def activate(request, uidb64, token):
 
 def account_activation_sent(request):
     return render(request, 'registration/account_activation_sent.html')
+
+
+def login_redirect(request):
+    user = request.user
+    if user is not None:
+        if user.is_active:
+            if user.is_superuser or user.is_staff:
+                return HttpResponseRedirect('/admin')
+            else:
+                return redirect('user_home')
+        else:
+            pass
+    # Return a 'disabled account' error message
+    else:
+        pass
+# Return an 'invalid login' error message.

@@ -152,7 +152,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = 'user_home'
+LOGIN_REDIRECT_URL = 'login-redirect'
 
 PROJECT_EMAIL = 'noreply@degrsys.ga'
 EMAIL_HOST = 'smtp.sendgrid.net'

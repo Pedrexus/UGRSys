@@ -15,7 +15,7 @@
     {% if user.is_authenticated %}
         <h1 class="text-center">Olá, {{ user.username }}</h1>
 	    <div class="text-center">
-		    <div class="btn-group btn-group-justified btn-group-mg my-btn-group-responsive" role="group" aria-label="Home buttons">
+		    <div class="btn-group btn-group-justified btn-group-mg my-2" role="group" aria-label="Home buttons">
 		            <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
 			        <a class="btn btn-primary" href="{% url 'user_home' %}">Minha Home</a>
 			</div>
@@ -29,7 +29,6 @@
 			</div>
 	        <div class="btn-group btn-group-justified btn-group-mg my-2" role="group" aria-label="Home buttons">
 		            <a class="btn btn-info" href="{% url 'reset_password' %}">Esqueci a senha</a>
-	                <a class="btn btn-info" href="/admin"> Administrador </a>
 			</div>
 	    </div>
     {% endif %}
