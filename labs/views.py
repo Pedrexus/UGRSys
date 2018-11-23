@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from labs.waste_status import update_wastes
@@ -10,7 +11,10 @@ from .models import Waste
 
 @login_required
 def user_home(request):
-    return render(request, 'labs/home.html')
+    if request.user.is_staff or request.user.is_superuser:
+        return HttpResponseRedirect('/admin')
+    else:
+        return render(request, 'labs/home.html')
 
 
 @login_required
@@ -47,14 +51,22 @@ def user_wastes(request):
     data = {
         'my_wastes_with_me': Waste.objects.filter(
             generator__user=request.user, status=Waste.STATUS_1),
+        # TODO: mudar status para relação númerica e fazer status__gt=STATUS_1
         'my_wastes_status_2': Waste.objects.filter(
-            generator__user=request.user, status=Waste.STATUS_2),
+            generator__user=request.user,
+            status=Waste.STATUS_2) | Waste.objects.filter(
+            generator__user=request.user,
+            status=Waste.STATUS_3) | Waste.objects.filter(
+            generator__user=request.user, status=Waste.STATUS_4),
         'my_bookmarked_wastes': Waste.objects.filter(
             generator__user=request.user, status=Waste.STATUS_BOOKMARK),
     }
 
     update_wastes(request, opt='send')
 
+    # TODO: nos resíduos enviados, o gerador deve ser capaz de ver a avaliação
+    # TODO: confirmar isso com o DeGR, pois talvez seja melhor q ele veja tudo
+    # TODO: como estatísticas soltas.
     return render(request, 'labs/wastes.html', data)
 
 
@@ -89,12 +101,11 @@ def user_wastes_update(request, waste_id):
 
 
 def user_wastes_delete(request, waste_id):
+    # delete confirmation in bootstrap-html modal.
     waste = get_object_or_404(Waste, pk=waste_id)
-    if request.method == 'POST':
-        waste.delete()
-        return redirect('user_wastes')
+    waste.delete()
 
-    return render(request, 'labs/waste_delete.html', {'this_waste': waste})
+    return redirect('user_wastes')
 
 
 def user_wastes_bookmark(request, waste_id):
@@ -131,10 +142,6 @@ def user_bookmarked_waste_use(request, waste_id):
 
 def user_bookmarked_waste_delete(request, waste_id):
     bookmarked_waste = get_object_or_404(Waste, pk=waste_id)
+    bookmarked_waste.delete()
 
-    if request.method == 'POST':
-        bookmarked_waste.delete()
-        return redirect('user_wastes')
-
-    return render(request, 'labs/waste_delete.html',
-                  {'this_waste': bookmarked_waste})
+    return redirect('user_wastes')
