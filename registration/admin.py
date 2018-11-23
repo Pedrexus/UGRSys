@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+
 from labs.models import Waste
 from labs.reports import csv_view
 from registration.models import MyUser
+
 
 def export_as_csv(modeladmin, request, queryset):
     gen = queryset.get()
@@ -10,7 +12,9 @@ def export_as_csv(modeladmin, request, queryset):
 
     return csv_view(request, data)
 
+
 admin.site.unregister(Group)
+
 
 @admin.register(MyUser)
 class MyUserAdmin(admin.ModelAdmin):
@@ -30,4 +34,5 @@ class MyUserAdmin(admin.ModelAdmin):
 
     def last_login(self, obj):
         return obj.user.last_login
+
     last_login.short_description = 'Último acesso'

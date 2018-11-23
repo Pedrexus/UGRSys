@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.db import models
 
-from substances.models import SubstanceName, Substance, Properties
+from substances.models import SubstanceName, Properties
 
 
 class Department(models.Model):
@@ -38,7 +38,7 @@ class Waste(models.Model):
                                   on_delete=models.CASCADE,
                                   verbose_name='Gerador')
     # Composição química do banco de dados:
-    chemical_makeup = models.ManyToManyField(SubstanceName,
+    chemical_makeup = models.ManyToManyField('substances.SubstanceName',
                                              verbose_name='Composição química',
                                              blank=True)
     # Composição química exclusiva:
