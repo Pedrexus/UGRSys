@@ -9,7 +9,7 @@ def update_wastes(request, opt='send'):
 def update_wastes_send(request):
     # First, we get the ids of all wastes that could be choosen
     my_wastes_ids = [str(waste.id) for waste in Waste.objects.filter(
-        generator__user=request.user, status=Waste.STATUS_1)]
+        generator=request.user, status=Waste.STATUS_1)]
 
     # then we get the wastes that were choosen
     send_wastes = {key: bool(request.GET.get(key, None)) for key in
