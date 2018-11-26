@@ -11,8 +11,12 @@ def generate_view(request, residuo_id, *args, **kwargs):
     waste = Waste.objects.get(pk=residuo_id)
     checks = waste.boolean_to_x()
 
+    #print(waste.chemical_makeup_names)
+    print(waste.chemical_makeup)
+
     context = {
-        "residuo": waste.chemical_makeup,
+        "residuo": waste.chemical_makeup_names,
+         "residuo_extra": waste.chemical_makeup_text,
          "barcode": barcode_number(waste),
         "nome_gerador": waste.generator,
         "laboratorio": waste.generator.laboratory,
@@ -36,5 +40,5 @@ def generate_view(request, residuo_id, *args, **kwargs):
 def barcode_number(waste):
     #TODO: colocar data e limite de dígitos
     date = re.sub("\D", "", str(waste.creation_date))[:8] #YYYYMMDD :8
-    return date+str(waste.pk).zfill(6) #preenche até 6 digitos. Quando passar de 1 milhao de resíduos vai quebrar eu conserto.
+    return date+str(waste.pk).zfill(6) #preenche até 6 digitos. Quando passar de 1 milhao de resíduos vai quebrar
 
