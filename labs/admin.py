@@ -1,60 +1,68 @@
+from collections import defaultdict
+
 from django.contrib import admin
-
-from django.utils.html import format_html
-from .reports import csv_view, xlsx_view
-
 from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from labs.filters import GeneratorListFilter
+from registration.models import MyUser
+from stats.models import Evaluation
 from .models import Waste, Laboratory, Department
+from .reports import csv_view, xlsx_view
 
+admin.site.disable_action('delete_selected')
 
-admin.site.register(Laboratory)
-admin.site.register(Department)
 
 def export_as_csv(modeladmin, request, queryset):
     return csv_view(request, queryset)
 
-def lab_export_as_csv(modeladmin, request, queryset):
-    #generators = queryset.objects.get()
-    return csv_view(request, queryset)
+
+export_as_csv.short_description = 'Exportar como CSV'
 
 
 def export_as_xlsx(modeladmin, request, queryset):
     return xlsx_view(request, queryset)
 
+
+export_as_csv.short_description = 'Exportar como Excel'
+
+
 @admin.register(Waste)
 class WasteAdmin(admin.ModelAdmin):
-    actions = ['evaluate_wastes', ]
+    actions = ['evaluate_wastes', export_as_csv, export_as_xlsx]
 
     date_hierarchy = 'last_modified_date'
-    empty_value_display = ''
+    empty_value_display = None
 
-    list_display = ('generator', 'view_amount_with_unit',
-                    'chemical_makeup_names', 'chemical_makeup_text',
+    list_display = ('get_generator', 'view_amount_with_unit',
+                    'chemical_makeup_names',
                     'status')
 
-    actions = [export_as_csv, export_as_xlsx]
+    list_display_links = ('view_amount_with_unit',)
+    fields = ('amount', 'unit',)
 
-    list_display_links = None
-    # list_editable = ('status',)
-    list_filter = ('status', 'generator',)
+    list_filter = (
+        'status',
+        GeneratorListFilter,
+    )
+    # list_editable = ('amount', )
     filter_horizontal = ('chemical_makeup',)
 
     def get_queryset(self, request):
         queryset = super(WasteAdmin, self).get_queryset(request)
         return queryset.exclude(status=Waste.STATUS_BOOKMARK)
 
+    def get_generator(self, obj):
+        return MyUser.objects.get(user=obj.generator).full_name
+
+    get_generator.short_description = 'Gerador'
 
     def view_amount_with_unit(self, obj):
         return str(float(obj.amount)) + ' ' + obj.unit
 
     view_amount_with_unit.short_description = Waste._meta.get_field(
         "amount").verbose_name.title()
-
-class LaboratoryAdmin(admin.ModelAdmin):
-    actions = [lab_export_as_csv, ]
 
     def evaluate_wastes(self, request, queryset):
         wastes_1 = queryset.filter(status=Waste.STATUS_1)
@@ -87,3 +95,97 @@ class LaboratoryAdmin(admin.ModelAdmin):
 
     evaluate_wastes.short_description = "Avaliar resíduos"
 
+
+@admin.register(Laboratory)
+class LaboratoryAdmin(admin.ModelAdmin):
+    actions = ['delete_selected', 'lab_export_as_csv', 'export_as_xlsx']
+
+    empty_value_display = ''
+
+    list_display = (
+        'name',
+        'get_number_generators',
+        'get_amount_waste_sent',
+        'get_frequencies',
+        'get_average_grade',
+    )
+
+    list_display_links = None
+    list_filter = ('name',)  # 'average_grade',)
+    list_editable = ('name',)
+
+    def lab_export_as_csv(self, request, queryset):
+        # generators = queryset.objects.get()
+        return csv_view(request, queryset)
+
+    lab_export_as_csv.short_description = 'Exportar como CSV'
+
+    def get_number_generators(self, obj):
+        amount = len(MyUser.objects.filter(laboratory=obj))
+        return str(amount)
+
+    get_number_generators.short_description = 'Número de Geradores'
+
+    def get_amount_waste_sent(self, obj):
+        lab_users = [my_user.user for my_user in
+                     MyUser.objects.filter(laboratory=obj)]
+        lab_wastes = Waste.objects.filter(generator__in=lab_users)
+
+        amount_kg = sum(
+            waste.amount for waste in
+            lab_wastes.filter(unit='Kg').exclude(status=Waste.STATUS_1)
+        ) #.normalize()
+        amount_l = sum(
+            waste.amount for waste in
+            lab_wastes.filter(unit='L').exclude(status=Waste.STATUS_1)
+        ) #.normalize()
+
+        return str(amount_kg) + ' Kg + ' + str(amount_l) + ' L'
+
+    get_amount_waste_sent.short_description = 'Quantidade de Resíduo Enviado'
+
+    def get_frequencies(self, obj):
+        lab_users = [my_user.user for my_user in
+                     MyUser.objects.filter(laboratory=obj)]
+        lab_wastes = Waste.objects.filter(generator__in=lab_users)
+
+        frequencies = defaultdict(lambda: defaultdict(float))
+        for waste in lab_wastes:
+            for name, amount in waste.substances_amounts.items():
+                frequencies[name][waste.unit] += amount
+
+        #TODO: melhorar visualização de dados
+        return frequencies
+    get_frequencies.short_description = 'Quantidade por Substância'
+    # name, frequency = Counter(db_wastes).most_common(1)[0]
+
+    def get_average_grade(self, obj):
+        lab_users = [my_user.user for my_user in
+                     MyUser.objects.filter(laboratory=obj)]
+        lab_wastes = Waste.objects.filter(generator__in=lab_users)
+        lab_eval = Evaluation.objects.filter(waste__in=lab_wastes)
+
+        fields = Evaluation._meta.get_fields()[1:-1]
+        grades = [sum([int(getattr(e, field.name)) for field in fields])/len(fields) for e in lab_eval]
+        if len(lab_eval):
+            avg_grade = 2*sum(grades)/len(lab_eval)
+        else:
+            avg_grade = ''
+
+        return str(avg_grade) + '/10' if avg_grade else ''
+    get_average_grade.short_description = 'Avaliação Média'
+
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    actions = ['delete_selected', 'export_as_csv', 'export_as_xlsx']
+
+    empty_value_display = ''
+
+    list_display = ('name',)
+    # 'get_number_generators', 'get_amount_waste',
+    # 'get_most_frequent_waste',
+    # 'get_average_grade')
+    list_display_links = None
+    list_filter = ('name',)  # 'average_grade',)
+    list_editable = ('name',)

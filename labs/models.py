@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.db import models
 
+from labs.functions import p2f
 from labs.validators import percentages_regex
 from registration.models import MyUser
 from substances.models import SubstanceName, Properties
@@ -159,7 +160,7 @@ class Waste(models.Model):
         main_pct = ['(' + pct.strip() + ')' for pct in self.chemical_makeup_pct.split(',')]
         main_names = ', '.join([' '.join(tpl) for tpl in zip(main_substances, main_pct)])
 
-        extra_substances = self.chemical_makeup_text.split(',')
+        extra_substances = self.chemical_makeup_text.split(',') if self.chemical_makeup_text else []
         extra_pct = ['(' + pct.strip() + ')' for pct in self.chemical_makeup_text_pct.split(',')]
         extra_names = ', '.join(
             [' '.join(tpl) for tpl in zip(extra_substances, extra_pct)]
@@ -169,6 +170,17 @@ class Waste(models.Model):
         return main_names + possible_comma + extra_names
 
     chemical_makeup_names.fget.short_description = 'Composição Química'
+
+    @property
+    def chemical_percentages(self):
+        substances = self.chemical_makeup_names.split(',')
+        return {s[:s.find('(')].strip(): s[s.find("(") + 1:s.find(")")] for s
+                in substances}
+
+    @property
+    def substances_amounts(self):
+        amount = float(self.amount)
+        return {name: amount*p2f(pctg) for name, pctg in self.chemical_percentages.items()}
 
     @property
     def substance_properties(self):

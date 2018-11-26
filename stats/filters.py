@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+from registration.models import MyUser
+
 
 class GeneratorListFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
@@ -19,7 +21,7 @@ class GeneratorListFilter(admin.SimpleListFilter):
         in the right sidebar.
         """
         queryset = model_admin.get_queryset(request)
-        generators = set(evaluation.waste.generator for evaluation in queryset)
+        generators = set(MyUser.objects.get(user=evaluation.waste.generator) for evaluation in queryset)
         options = (
             (str(generator.user), str(generator)) for generator in generators
         )
@@ -50,7 +52,7 @@ class GeneratorListFilter(admin.SimpleListFilter):
             return queryset.all()
         else:
             return queryset.filter(
-                waste__generator__user__username=self.value())
+                waste__generator__username=self.value())
 
 
 class DepartmentListFilter(admin.SimpleListFilter):
@@ -71,7 +73,7 @@ class DepartmentListFilter(admin.SimpleListFilter):
         """
         queryset = model_admin.get_queryset(request)
         departments = set(
-            evaluation.waste.generator.department for evaluation in
+            MyUser.objects.get(user=evaluation.waste.generator).department for evaluation in
             queryset)
         options = (
             (str(department), str(department)) for department in departments
@@ -102,8 +104,9 @@ class DepartmentListFilter(admin.SimpleListFilter):
         if self.value() is None:
             return queryset.all()
         else:
-            return queryset.filter(
-                waste__generator__department__name=self.value())
+            my_users_list = MyUser.objects.filter(department__name=self.value())
+            usernames_list = [my_user.user.username for my_user in my_users_list]
+            return queryset.filter(waste__generator__username__in=usernames_list)
 
 
 class LaboratoryListFilter(admin.SimpleListFilter):
@@ -124,7 +127,7 @@ class LaboratoryListFilter(admin.SimpleListFilter):
         """
         queryset = model_admin.get_queryset(request)
         laboratories = set(
-            evaluation.waste.generator.laboratory for evaluation in
+            MyUser.objects.get(user=evaluation.waste.generator).laboratory for evaluation in
             queryset)
         options = (
             (str(laboratory), str(laboratory)) for laboratory in laboratories
@@ -155,5 +158,7 @@ class LaboratoryListFilter(admin.SimpleListFilter):
         if self.value() is None:
             return queryset.all()
         else:
+            my_users_list = MyUser.objects.filter(laboratory__name=self.value())
+            usernames_list = [my_user.user.username for my_user in my_users_list]
             return queryset.filter(
-                waste__generator__laboratory__name=self.value())
+                waste__generator__username__in=usernames_list)

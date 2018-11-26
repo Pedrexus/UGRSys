@@ -1,0 +1,81 @@
+{% extends 'base_logged.html' %}
+{% load bootstrap %}
+{% load widget_tweaks %}
+
+{% block title %}Formulário de Sugestões{% endblock %}
+
+{% block main %}
+    <div class="col-md-7 align-middle">
+        <div class="card border-light bg-light mb-3">
+            <div class="card-header jumbotron text-white bg-dark">
+                <h1 class="text-center">Sugestões e Relatos de Bugs</h1>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row justify-content-sm-center">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!--Campo de sugestão-->
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.comments.label_tag }}-->
+                                <strong id="commentsHelpBlock"
+                                        class="form-text text-muted mb-3">
+                                    {{ form.comments.help_text }}
+                                </strong>
+                                {% render_field form.comments class+="form-control responsive-textarea" placeholder=form.comments.label aria-describedby="commentsHelpBlock" %}
+                            </div>
+                        </div>
+
+                        <!--Mensagem de obrigado-->
+                        {% if saved %}
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <div class="alert alert-success"
+                                         role="alert">
+                                        <h4 class="alert-heading">Muito
+                                            Obrigado!</h4>
+                                        <p>
+                                            <strong>{{ user.username }}</strong>,
+                                            as
+                                            suas
+                                            palavras tem muito valor para nós,
+                                            desenvolvedores
+                                            do <em>DeGR<span>sys</span></em>!
+                                            Agradecemos
+                                            muito
+                                            pela sua participação nesse
+                                            projeto.
+                                        </p>
+                                        <hr>
+                                        <p class="mb-0">Ah! E você pode mandar
+                                            <strong>quantas
+                                                sugestões quiser, quantas vezes
+                                                quiser!</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!--botão de envio-->
+                        <div class="card-footer bg-transparent align-middle">
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">
+                                    Enviar
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

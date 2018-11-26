@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['10.158.0.2', '35.199.100.56', '127.0.0.1',
-                 'localhost', 'degrsys.ga']
+                 'localhost', 'degrsys.ga', 'www.degrsys.ga']
 
 # Application definition
 
@@ -52,6 +52,7 @@ PROJECT_APPS = [
     'labs.apps.LabsConfig',
     'substances.apps.SubstancesConfig',
     'stats.apps.StatsConfig',
+    'suggestions.apps.SuggestionsConfig'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS

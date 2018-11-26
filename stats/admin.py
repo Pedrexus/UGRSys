@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from registration.models import MyUser
 from stats.filters import GeneratorListFilter, DepartmentListFilter, \
     LaboratoryListFilter
 from stats.models import Evaluation
@@ -16,6 +17,7 @@ class EvaluationAdmin(admin.ModelAdmin):
         'storage_conditions',
         'tag_conditions',
         'help_from_generator',
+        'extra_comments',
     )
     list_editable = (
         'in_accordance_with_description',
@@ -33,7 +35,7 @@ class EvaluationAdmin(admin.ModelAdmin):
     )
 
     def get_generator(self, obj):
-        return obj.waste.generator
+        return MyUser.objects.get(user=obj.waste.generator).full_name
     get_generator.short_description = 'Gerador'
 
     def get_waste_names(self, obj):

@@ -6,11 +6,11 @@ class Evaluation(models.Model):
         verbose_name = 'Avaliação'
         verbose_name_plural = 'Avaliações'
 
-    EVALUATION_1 = 'Awful'
-    EVALUATION_2 = 'Bad'
-    EVALUATION_3 = 'Satisfactory'
-    EVALUATION_4 = 'Good'
-    EVALUATION_5 = 'Superb'
+    EVALUATION_1 = '1'
+    EVALUATION_2 = '2'
+    EVALUATION_3 = '3'
+    EVALUATION_4 = '4'
+    EVALUATION_5 = '5'
 
     EVALUATION_CHOICES = (
         (EVALUATION_1, 'Péssimo'),
@@ -52,6 +52,10 @@ class Evaluation(models.Model):
         choices=EVALUATION_CHOICES,
         # default=EVALUATION_3,
         verbose_name='Atendimento do gerador'
+    )
+    extra_comments = models.TextField(
+        blank=True,
+        verbose_name='Comentários Adicionais'
     )
 
     def __str__(self):

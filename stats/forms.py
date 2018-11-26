@@ -14,9 +14,18 @@ class EvaluationForm(forms.ModelForm):
             'storage_conditions',
             'tag_conditions',
             'help_from_generator',
+            'extra_comments',
         )
 
         labels = {
+            'in_accordance_with_description': _('De acordo com a descrição'),
+            'flask_conditions': _('Condições da bomba'),
+            'storage_conditions': _('Situação da armazenagem'),
+            'tag_conditions': _('Situação da etiqueta'),
+            'help_from_generator': _('Atendimento do gerador'),
+            'extra_comments': _('Comentário adicionais'),
+        }
+        empty_labels = {
             'in_accordance_with_description': _('De acordo com a descrição'),
             'flask_conditions': _('Condições da bomba'),
             'storage_conditions': _('Situação da armazenagem'),
@@ -34,10 +43,11 @@ class EvaluationForm(forms.ModelForm):
                                 ' as informações dela estão legíveis?'),
             'help_from_generator': _('Como foi o auxílio que o gerador'
                                      ' do resíduo lhe concedeu?'),
+            'extra_comments': _('Algum comentário adicional ao gerador?')
         }
         error_messages = {
 
         }
         widgets = {
-
+            'extra_comments': forms.Textarea(attrs={'cols': 75, 'rows': 10}),
         }

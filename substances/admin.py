@@ -2,12 +2,16 @@ from django.contrib import admin
 
 from substances.models import SubstanceName, Substance
 
-admin.site.register(SubstanceName)
+
+@admin.register(SubstanceName)
+class NameAdmin(admin.ModelAdmin):
+    actions = ['delete_selected', ]
 
 
 @admin.register(Substance)
 class SubstanceAdmin(admin.ModelAdmin):
-    empty_value_display = ''
+    actions = ['delete_selected', ]
+    empty_value_display = None
 
     list_display = (
         'name',
