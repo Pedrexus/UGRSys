@@ -1,15 +1,170 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% load widget_tweaks %}
 
 {% block title %} Cadastre-se {% endblock %}
 
 {% block main %}
 
-      <h2>Cadastro de novo usuário</h2>
-      <form method="post">
-        {% csrf_token %}
-        {{ form|bootstrap_horizontal }}
-        <button type="submit">Sign up</button>
-      </form>
+    <div class="card border-light bg-light mb-3" style="max-width: 100rem;">
+        <div class="card-header jumbotron text-white bg-dark">
+            <h1 class="text-center">Cadastro de novo usuário</h1>
+        </div>
+        <div class="card-body">
+
+            <div class="row justify-content-md-center">
+                <div class="col col-sm"></div>
+                <div class="col-md-8">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.full_name.label_tag }}-->
+                                {% render_field form.full_name class+="form-control" placeholder=form.full_name.label aria-describedby="fullnameHelpBlock" %}
+                                <small id="fullnameHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.full_name.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.full_name.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <!--{{ form.department.label_tag }}-->
+                                {% render_field form.department class+="form-control" placeholder=form.department.label aria-describedby="departmentHelpBlock" %}
+                                <small id="departmentHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.department.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.department.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-8">
+                                <!--{{ form.laboratory.label_tag }}-->
+                                {% render_field form.laboratory class+="form-control" placeholder=form.laboratory.label aria-describedby="laboratoryHelpBlock" %}
+                                <small id="laboratoryHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.laboratory.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.laboratory.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <!--{{ form.email.label_tag }}-->
+                                {% render_field form.email class+="form-control" placeholder=form.email.label aria-describedby="emailHelpBlock" %}
+                                <small id="emailHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.email.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.email.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-5">
+                                <!--{{ form.phone_number.label_tag }}-->
+                                {% render_field form.phone_number class+="form-control" placeholder=form.phone_number.label aria-describedby="phone_numberHelpBlock" %}
+                                <small id="phone_numberHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.phone_number.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.phone_number.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <!--{{ form.username.label_tag }}-->
+                                {% render_field form.username class+="form-control" placeholder=form.username.label aria-describedby="usernameHelpBlock" %}
+                                <small id="usernameHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.username.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.username.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-4">
+                                <!--{{ form.password1.label_tag }}-->
+                                {% render_field form.password1 class+="form-control" placeholder=form.password1.label aria-describedby="password1HelpBlock" %}
+                                <small id="password1HelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.password1.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.password1.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-4">
+                                <!--{{ form.password2.label_tag }}-->
+                                {% render_field form.password2 class+="form-control" placeholder=form.password2.label aria-describedby="password2HelpBlock" %}
+                                <small id="password2HelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.password2.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.password2.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent align-middle">
+                            <button class="btn btn-light btn-lg btn-block" type="submit">
+                                Inscreva-se
+                            </button>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="col col-sm"></div>
+            </div>
+
+        </div>
+    </div>
+
 
 {% endblock %}

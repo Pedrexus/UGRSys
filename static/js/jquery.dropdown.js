@@ -55,7 +55,7 @@
     input: '<input type="text" maxLength="20" placeholder="Pesquisar">',
     data: [],
     searchable: true,
-    searchNoData: '<li style="color:#ddd">No Results</li>',
+    searchNoData: '<li style="color:#ddd">Sem Resultados</li>',
     init: noop,
     choice: noop,
     extendProps: []

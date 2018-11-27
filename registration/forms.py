@@ -12,10 +12,10 @@ class SignUpForm(UserCreationForm):
     full_name = forms.CharField(max_length=50, required=True, help_text='',
                                 label=_('Nome completo'))
     department = forms.ModelChoiceField(queryset=Department.objects.all(),
-                                        empty_label=None,
+                                        empty_label=_('Departamento'),
                                         label=_('Departamento'))
     laboratory = forms.ModelChoiceField(queryset=Laboratory.objects.all(),
-                                        empty_label=None,
+                                        empty_label=_('Laboratório'),
                                         label=_('Laboratório'))
 
     email = forms.EmailField(max_length=254, required=True,
@@ -23,7 +23,7 @@ class SignUpForm(UserCreationForm):
                              label=_('e-mail'))
     phone_number = forms.CharField(validators=[phone_regex], required=True,
                                    max_length=17, help_text=_(
-            'Campo Obrigatório. Informe um número de telefone para contato.'),
+            'Informe um número de telefone para contato.'),
                                    label=_('Contato'))
 
     class Meta(UserCreationForm.Meta):

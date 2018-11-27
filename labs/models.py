@@ -1,8 +1,12 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.db import models
 
-from substances.models import SubstanceName, Substance, Properties
+from labs.functions import p2f
+from labs.validators import percentages_regex
+from registration.models import MyUser
+from substances.models import SubstanceName, Properties
 
 
 class Department(models.Model):
@@ -34,18 +38,26 @@ class Waste(models.Model):
         verbose_name = 'Resíduo'
         verbose_name_plural = 'Resíduos'
 
-    generator = models.ForeignKey('registration.MyUser',
+    generator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   on_delete=models.CASCADE,
                                   verbose_name='Gerador')
     # Composição química do banco de dados:
-    chemical_makeup = models.ManyToManyField(SubstanceName,
+    chemical_makeup = models.ManyToManyField('substances.SubstanceName',
                                              verbose_name='Composição química',
                                              blank=True)
+    chemical_makeup_pct = models.CharField(max_length=300,
+                                           verbose_name='Concentrações',
+                                           validators=[percentages_regex],
+                                           default='0%')
+
     # Composição química exclusiva:
     chemical_makeup_text = models.CharField(max_length=200,
                                             verbose_name='Composição química extra',
                                             default='', blank=True)
-
+    chemical_makeup_text_pct = models.CharField(max_length=300,
+                                                verbose_name='Concentrações',
+                                                validators=[percentages_regex],
+                                                default='0%')
     STATUS_1 = 'User inventory'
     STATUS_2 = 'Waiting removal'
     STATUS_3 = 'DeGR inventory'
@@ -144,12 +156,31 @@ class Waste(models.Model):
 
     @property
     def chemical_makeup_names(self):
-        main_names = ', '.join(
-            [substance.name for substance in self.chemical_makeup.all()])
-        possible_comma = ', ' if main_names and self.chemical_makeup_text else ''
-        return main_names + possible_comma + str(self.chemical_makeup_text)
+        main_substances = [substance.name for substance in self.chemical_makeup.all()]
+        main_pct = ['(' + pct.strip() + ')' for pct in self.chemical_makeup_pct.split(',')]
+        main_names = ', '.join([' '.join(tpl) for tpl in zip(main_substances, main_pct)])
+
+        extra_substances = self.chemical_makeup_text.split(',') if self.chemical_makeup_text else []
+        extra_pct = ['(' + pct.strip() + ')' for pct in self.chemical_makeup_text_pct.split(',')]
+        extra_names = ', '.join(
+            [' '.join(tpl) for tpl in zip(extra_substances, extra_pct)]
+        )
+
+        possible_comma = ', ' if main_names and extra_names else ''
+        return main_names + possible_comma + extra_names
 
     chemical_makeup_names.fget.short_description = 'Composição Química'
+
+    @property
+    def chemical_percentages(self):
+        substances = self.chemical_makeup_names.split(',')
+        return {s[:s.find('(')].strip(): s[s.find("(") + 1:s.find(")")] for s
+                in substances}
+
+    @property
+    def substances_amounts(self):
+        amount = float(self.amount)
+        return {name: amount*p2f(pctg) for name, pctg in self.chemical_percentages.items()}
 
     @property
     def substance_properties(self):
@@ -162,7 +193,8 @@ class Waste(models.Model):
 
     def __str__(self):
         return ': '.join(
-            [self.generator.full_name, self.chemical_makeup_names])
+            [MyUser.objects.get(user=self.generator).full_name,
+             self.chemical_makeup_names])
 
     def inventory_label(self):
         s = ''

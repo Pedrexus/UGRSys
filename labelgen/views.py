@@ -1,14 +1,17 @@
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from labs.models import Waste
+from registration.models import MyUser
 from .labels import render_label
 
-import re
 
 @login_required
 def generate_view(request, residuo_id, *args, **kwargs):
     waste = Waste.objects.get(pk=residuo_id)
+    generator = MyUser.objects.get(user=request.user)
     checks = waste.boolean_to_x()
 
     #print(waste.chemical_makeup_names)
@@ -18,11 +21,11 @@ def generate_view(request, residuo_id, *args, **kwargs):
         "residuo": waste.chemical_makeup_names,
          "residuo_extra": waste.chemical_makeup_text,
          "barcode": barcode_number(waste),
-        "nome_gerador": waste.generator,
-        "laboratorio": waste.generator.laboratory,
-        "telefone": waste.generator.phone_number,
+        "nome_gerador": generator,
+        "laboratorio": generator.laboratory,
+        "telefone": generator.phone_number,
         "data_de_postagem": waste.creation_date,
-        "email": waste.generator.email,
+        "email": generator.email,
         "halogen_check": checks['halogen'],
         "acetonitrile_check": checks['acetonitrile'],
         "heavy_metals_check": checks['heavy_metals'],

@@ -33,10 +33,51 @@
                             </a>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-danger"
-                               href="{% url 'delete_waste' waste.id %}">
+                            <button type="button" class="btn btn-danger"
+                                    data-toggle="modal"
+                                    data-target="#delete-{{ waste.id }}">
                                 <i class="fas fa-trash-alt fa-2x"></i>
-                            </a>
+                            </button>
+
+                            <div class="modal fade bd-example-modal-sm"
+                                 tabindex="-1" role="dialog"
+                                 aria-labelledby="DeleteWasteModal"
+                                 aria-hidden="true"
+                                 id="delete-{{ waste.id }}">
+                                <div class="modal-dialog modal-dialog-centered modal-sm"
+                                     role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"
+                                                id="exampleModalLongTitle">
+                                                Deletar</h5>
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            Você confirmar que quer deletar:
+                                            <strong class="text-danger font-weight-bold">{{ waste.chemical_makeup_names }}</strong>?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button"
+                                                    class="btn btn-secondary"
+                                                    data-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <a class="btn btn-danger"
+                                               href="{% url 'delete_waste' waste.id %}">
+                                                Deletar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </td>
                         <td class="text-center">
                             <a class="btn btn-warning"
@@ -74,7 +115,8 @@
         <a class="btn btn-primary my-1" href="{% url 'create_waste' %}">Novo
             Resíduo</a>
         {% if my_wastes_with_me %}
-            <button form="send-form" class="btn btn-secondary my-1" type="submit">
+            <button form="send-form" class="btn btn-secondary my-1"
+                    type="submit">
                 Enviar
                 Resíduos
                 Selecionados
@@ -106,10 +148,51 @@
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-danger"
-                           href="{% url 'delete_bookmarked_waste' bwaste.id %}">
+                        <button type="button" class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#delete-b-{{ bwaste.id }}">
                             <i class="fas fa-trash-alt fa-2x"></i>
-                        </a>
+                        </button>
+
+                        <div class="modal fade bd-example-modal-sm"
+                             tabindex="-1" role="dialog"
+                             aria-labelledby="DeleteWasteModal"
+                             aria-hidden="true"
+                             id="delete-b-{{ bwaste.id }}">
+                            <div class="modal-dialog modal-dialog-centered modal-sm"
+                                 role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            id="exampleModalLongTitle">
+                                            Deletar</h5>
+                                        <button type="button" class="close"
+                                                data-dismiss="modal"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        Você confirmar que quer deletar o
+                                        favorito:
+                                        <strong class="text-danger font-weight-bold">{{ bwaste.chemical_makeup_names }}</strong>?
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button"
+                                                class="btn btn-secondary"
+                                                data-dismiss="modal">Cancelar
+                                        </button>
+                                        <a class="btn btn-danger"
+                                           href="{% url 'delete_bookmarked_waste' bwaste.id %}">
+                                            Deletar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
             {% endfor %}
@@ -127,6 +210,7 @@
             <tr>
                 <th scope="col">Resíduo</th>
                 <th scope="col" class="text-center">Situação</th>
+                <th scope="col" class="text-center">Etiqueta</th>
             </tr>
             </thead>
             <tbody>
@@ -134,6 +218,12 @@
                 <tr>
                     <th scope="row">{{ waste.chemical_makeup_names }}</th>
                     <td class="text-center">{{ waste.get_status_display }}</td>
+                    <td class="text-center">
+                        <a class="btn btn-warning"
+                           href="{% url 'pdf_waste' waste.id %}">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

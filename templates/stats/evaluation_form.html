@@ -1,15 +1,113 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% load widget_tweaks %}
 
 {% block title %} Avaliação de resíduos {% endblock %}
 
 {% block main %}
 
-      <h2>Avaliação de resíduos</h2>
-      <form method="post">
-        {% csrf_token %}
-        {{ form|bootstrap_horizontal }}
-        <button type="submit">Salvar</button>
-      </form>
+    <div class="card border-light bg-light mb-5" style="max-width: 100 rem;">
+        <div class="card-header text-white bg-dark">
+            <h1 class="text-center">Avaliação de resíduos</h1>
+        </div>
+        <div class="card-body">
+
+            <div class="row justify-content-md-center">
+                <div class="col-md-8">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.in_accordance_with_description.label_tag }}-->
+                                <small id="HelpBlock1"
+                                       class="form-text text-muted my-2">
+                                    {{ form.in_accordance_with_description.help_text }}
+                                </small>
+                                {% render_field form.in_accordance_with_description class+="form-control" placeholder=form.in_accordance_with_description.label aria-describedby="HelpBlock1" %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.flask_conditions.label_tag }}-->
+                                <small id="HelpBlock2"
+                                       class="form-text text-muted my-2">
+                                    {{ form.flask_conditions.help_text }}
+                                </small>
+                                {% render_field form.flask_conditions class+="form-control" placeholder=form.flask_conditions.label aria-describedby="HelpBlock2" %}
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.storage_conditions.label_tag }}-->
+                                <small id="HelpBlock3"
+                                       class="form-text text-muted my-2">
+                                    {{ form.storage_conditions.help_text }}
+                                </small>
+                                {% render_field form.storage_conditions class+="form-control" placeholder=form.storage_conditions.label aria-describedby="HelpBlock3" %}
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.tag_conditions.label_tag }}-->
+                                <small id="HelpBlock4"
+                                       class="form-text text-muted my-2">
+                                    {{ form.tag_conditions.help_text }}
+                                </small>
+                                {% render_field form.tag_conditions class+="form-control" placeholder=form.tag_conditions.label aria-describedby="HelpBlock4" %}
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.help_from_generator.label_tag }}-->
+                                <small id="HelpBlock5"
+                                       class="form-text text-muted my-2">
+                                    {{ form.help_from_generator.help_text }}
+                                </small>
+                                {% render_field form.help_from_generator class+="form-control" placeholder=form.help_from_generator.label aria-describedby="HelpBlock5" %}
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.extra_comments.label_tag }}-->
+                                <small id="HelpBlock6"
+                                       class="form-text text-muted my-2">
+                                    {{ form.extra_comments.help_text }}
+                                </small>
+                                {% render_field form.extra_comments class+="form-control" placeholder=form.extra_comments.label aria-describedby="HelpBlock6" %}
+                                {% if form.errors %}
+                                    {% for error in form.extra_comments.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent align-middle">
+                            <button class="btn btn-light btn-lg btn-block"
+                                    type="submit">
+                                Finalizar Avaliação
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
 {% endblock %}

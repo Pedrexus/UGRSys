@@ -1,41 +1,109 @@
 html, body {
-  height: 100%;
+    height: 100%;
 }
 
 #wrap {
-  min-height: 85%;
+    min-height: 85%;
 }
 
 #main {
-  overflow:auto;
-  padding-bottom:150px; /* this needs to be bigger than footer height*/
+    overflow: auto;
+    padding-bottom: 150px; /* this needs to be bigger than footer height*/
 }
 
 .footer {
-  position: relative;
-  margin-top: -150px; /* negative value of footer height */
+    position: relative;
+    margin-top: -150px; /* negative value of footer height */
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -99;
+    width: 100%;
+}
+
+.my-card {
+    box-shadow: 3px 3px 0.5em black;
+}
+
+.semi-transparent-header {
+    display: flex;
+
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 200px;
+    padding: 0;
+    margin: 0;
+
+    box-shadow: 0 0 .35em black;
+}
+
+.align-middle {
+    margin: auto;
+    text-align: center;
+}
+
+.header-content {
+    color: white;
+    font-weight: bold;
+    font-size: 3rem;
+    letter-spacing: 8px;
+}
+
+.move-down {
+    top: -43%;
 }
 
 @media (max-width: 991px) {
-  .btn-group .my-btn-group-responsive > .btn {
-    display: block;
-    width: 100%;
-  }
+    .btn-group .my-btn-group-responsive > .btn {
+        display: block;
+        width: 100%;
+    }
 
-  /* making the border-radius correct */
-  .btn-group.my-btn-group-responsive > .btn:first-child {
-    border-radius: 6px 6px 0 0;
-  }
-  .btn-group.my-btn-group-responsive > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
-    border-top-right-radius: 6px;
-  }
-  .btn-group.my-btn-group-responsive > .btn:last-child:not(:first-child) {
-    border-radius: 0 0 6px 6px;
-  }
+    /* making the border-radius correct */
+    .btn-group.my-btn-group-responsive > .btn:first-child {
+        border-radius: 6px 6px 0 0;
+    }
 
-  /* fixing margin */
-  .btn-group.my-btn-group-responsive .btn + .btn {
-    margin-left: 0;
-  }
+    .btn-group.my-btn-group-responsive > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+        border-top-right-radius: 6px;
+    }
+
+    .btn-group.my-btn-group-responsive > .btn:last-child:not(:first-child) {
+        border-radius: 0 0 6px 6px;
+    }
+
+    /* fixing margin */
+    .btn-group.my-btn-group-responsive .btn + .btn {
+        margin-left: 0;
+    }
+
+    .background {
+        display: block;
+
+        position: fixed;
+        z-index: -99;
+
+    }
+
+    .move-down {
+        top: 0;
+    }
+
+
+    .vertical-img {
+        transform: scale(2);
+    }
+
+    .horizontal-img {
+        transform: scale(5);
+    }
+
+    .semi-transparent-header {
+
+        height: 45%;
+    }
 
 }

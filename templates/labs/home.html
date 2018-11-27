@@ -1,12 +1,28 @@
 {% extends 'base_logged.html' %}
+{% load static %}
 
 {% block title %} Gestão de Resíduos {% endblock %}
 
 {% block main %}
-	<h1 class="text-center">Seja Bem Vindo, {{ user.username }}</h1>
-	    <div class="text-center">
-		    <div class="btn-group btn-group-justified btn-group-mg my-2">
-		            <a class="btn btn-danger" href="{% url 'logout' %}">logout</a>
-			</div>
-	    </div>
+    <div class="shadow">
+        <img class="move-down background horizontal-img"
+             src="{% static "images/abandoned-iceland-farm-home_4460x4460.jpg" %}">
+    </div>
+    <div class="card text-white bg-dark mx-auto my-5 text-center my-card"
+         style="width: 16rem;">
+        <div class="card-header">Dashboard
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Olá, {{ user.username }}</h5>
+            <p class="card-text">***</p>
+            <div class="btn-group btn-group-justified btn-group-mg my-2"
+                 role="group" aria-label="Home buttons">
+                <div class="btn-group btn-group-justified btn-group-mg my-2">
+                    <a class="btn btn-danger"
+                       href="{% url 'logout' %}">logout</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}

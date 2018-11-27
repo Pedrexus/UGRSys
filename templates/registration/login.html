@@ -1,15 +1,73 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% load widget_tweaks %}
 
-{% block title %}Login{% endblock %}
+{% block title %} Login {% endblock %}
 
 {% block main %}
 
-    <h3>Login</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form|bootstrap_horizontal }}
-        <button class="btn btn-info" type="submit">Login</button>
-    </form>
+    <div class="card border-light bg-light mb-3" style="max-width: 100rem;">
+        <div class="card-header text-white bg-dark">
+            <h1 class="text-center">Login</h1>
+        </div>
+        <div class="card-body">
+
+            <div class="row justify-content-md-center">
+                <div class="col col-sm"></div>
+                <div class="col-md-8">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.username.label_tag }}-->
+                                {% render_field form.username class+="form-control" placeholder=form.username.label aria-describedby="usernameHelpBlock" %}
+                                <small id="usernameHelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.username.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.username.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <!--{{ form.password.label_tag }}-->
+                                {% render_field form.password class+="form-control" placeholder=form.password.label aria-describedby="passwordHelpBlock" %}
+                                <small id="password1HelpBlock"
+                                       class="form-text text-muted">
+                                    {{ form.password.help_text }}
+                                </small>
+                                {% if form.errors %}
+                                    {% for error in form.password.errors %}
+                                        <div class="alert alert-warning">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent align-middle">
+                            <button class="btn btn-light btn-lg btn-block" type="submit">
+                                Entrar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col col-sm"></div>
+            </div>
+
+        </div>
+    </div>
+
 
 {% endblock %}

@@ -24,6 +24,7 @@ urlpatterns = [
     path('labs/', include('labs.urls')),
     path('label/', include('labelgen.urls')),
     path('statistics/', include('stats.urls')),
+    path('statistics/', include('suggestions.urls')),
 
               ] + static(settings.STATIC_URL,
                          document_root=settings.STATIC_ROOT) + \
