@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.html import linebreaks
+from django.utils.safestring import mark_safe
 
 from labs.filters import GeneratorListFilter
 from registration.models import MyUser
@@ -106,7 +108,7 @@ class LaboratoryAdmin(admin.ModelAdmin):
         'name',
         'get_number_generators',
         'get_amount_waste_sent',
-        'get_frequencies',
+        'view_frequencies',
         'get_average_grade',
     )
 
@@ -144,7 +146,8 @@ class LaboratoryAdmin(admin.ModelAdmin):
 
     get_amount_waste_sent.short_description = 'Quantidade de Resíduo Enviado'
 
-    def get_frequencies(self, obj):
+    @staticmethod
+    def get_frequencies(obj):
         lab_users = [my_user.user for my_user in
                      MyUser.objects.filter(laboratory=obj)]
         lab_wastes = Waste.objects.filter(generator__in=lab_users)
@@ -154,9 +157,16 @@ class LaboratoryAdmin(admin.ModelAdmin):
             for name, amount in waste.substances_amounts.items():
                 frequencies[name][waste.unit] += amount
 
-        #TODO: melhorar visualização de dados
         return frequencies
-    get_frequencies.short_description = 'Quantidade por Substância'
+
+    def view_frequencies(self, obj):
+        freq = self.get_frequencies(obj)
+
+        info = ['<strong>' + s_name + '</strong>' + ': ' + str(freq[s_name]['Kg']) + ' Kg + ' + str(freq[s_name]['L']) + ' L' for s_name in freq]
+
+        return mark_safe(linebreaks(', \n'.join(info)))
+
+    view_frequencies.short_description = 'Quantidade por Substância'
     # name, frequency = Counter(db_wastes).most_common(1)[0]
 
     def get_average_grade(self, obj):

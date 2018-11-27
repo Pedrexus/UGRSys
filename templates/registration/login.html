@@ -19,6 +19,12 @@
                     <form method="post">
                         {% csrf_token %}
 
+                        {% if form.errors %}
+                                <div class="alert alert-warning">
+                                    <strong>{{ form.non_field_errors }}</strong>
+                                </div>
+                        {% endif %}
+
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <!--{{ form.username.label_tag }}-->
@@ -27,13 +33,6 @@
                                        class="form-text text-muted">
                                     {{ form.username.help_text }}
                                 </small>
-                                {% if form.errors %}
-                                    {% for error in form.username.errors %}
-                                        <div class="alert alert-warning">
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
                             </div>
                         </div>
 
@@ -45,18 +44,12 @@
                                        class="form-text text-muted">
                                     {{ form.password.help_text }}
                                 </small>
-                                {% if form.errors %}
-                                    {% for error in form.password.errors %}
-                                        <div class="alert alert-warning">
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
                             </div>
                         </div>
 
                         <div class="card-footer bg-transparent align-middle">
-                            <button class="btn btn-light btn-lg btn-block" type="submit">
+                            <button class="btn btn-light btn-lg btn-block"
+                                    type="submit">
                                 Entrar
                             </button>
                         </div>

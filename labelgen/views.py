@@ -19,7 +19,7 @@ def generate_view(request, residuo_id, *args, **kwargs):
 
     context = {
         "residuo": waste.chemical_makeup_names,
-         "residuo_extra": waste.chemical_makeup_text,
+         # "residuo_extra": waste.chemical_makeup_text,
          "barcode": barcode_number(waste),
         "nome_gerador": generator,
         "laboratorio": generator.laboratory,
