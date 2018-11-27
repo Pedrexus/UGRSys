@@ -134,13 +134,14 @@ class LaboratoryAdmin(admin.ModelAdmin):
         lab_wastes = Waste.objects.filter(generator__in=lab_users)
 
         amount_kg = sum(
-            waste.amount for waste in
+            float(waste.amount) for waste in
             lab_wastes.filter(unit='Kg').exclude(status=Waste.STATUS_1)
-        ) #.normalize()
+        )
+
         amount_l = sum(
-            waste.amount for waste in
+            float(waste.amount) for waste in
             lab_wastes.filter(unit='L').exclude(status=Waste.STATUS_1)
-        ) #.normalize()
+        )
 
         return str(amount_kg) + ' Kg + ' + str(amount_l) + ' L'
 
