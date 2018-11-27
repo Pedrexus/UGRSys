@@ -18,16 +18,39 @@ class SignUpForm(UserCreationForm):
                                         empty_label=_('Laboratório'),
                                         label=_('Laboratório'))
 
-    email = forms.EmailField(max_length=254, required=True,
-                             help_text='Informe um endereço de e-mail válido.',
-                             label=_('e-mail'))
-    phone_number = forms.CharField(validators=[phone_regex], required=True,
-                                   max_length=17, help_text=_(
+    email = forms.EmailField(
+        max_length=254,
+        required=True,
+        help_text='Informe um endereço de e-mail válido.',
+        label=_('e-mail'),
+        error_messages={
+            'invalid': _("")}
+    )
+    phone_number = forms.CharField(
+        validators=[phone_regex],
+        required=True,
+        max_length=17, help_text=_(
             'Informe um número de telefone para contato.'),
-                                   label=_('Contato'))
+        label=_('Contato'),
+        error_messages={
+            'invalid': _("")}
+    )
 
     class Meta(UserCreationForm.Meta):
         model = User
+
+    def clean(self):
+        cleaned_data = super(SignUpForm, self).clean()
+
+        if len(MyUser.objects.filter(email=cleaned_data.get('email'))):
+            self.add_error('email', _("Esse e-mail já foi registrado. "
+                                      "Tente criar a sua conta com "
+                                      "outro e-mail."))
+        elif len(MyUser.objects.filter(
+                phone_number=cleaned_data.get('phone_number'))):
+            self.add_error('phone_number', _("Esse número de telefone já foi "
+                                             "registrado. Tente criar a sua "
+                                             "conta com outro número."))
 
     @transaction.atomic
     def save(self, commit=True):

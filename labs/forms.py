@@ -111,7 +111,7 @@ class WasteForm(forms.ModelForm):
             extra_sing = extra_[:-1]
 
             msg_bit = f"as {len_} substâncias {extra_}. " \
-                      f"" if len_ > 1 else f"a substância {extra_sing}."
+                f"" if len_ > 1 else f"a substância {extra_sing}."
             msg = "Insira concentrações para " + msg_bit + \
                   " Dica: se não tiver certeza, coloque '0%'."
             return msg
@@ -121,7 +121,7 @@ class WasteForm(forms.ModelForm):
             self.add_error('chemical_makeup_pct', make_msg(len_))
         elif len(chemical_makeup_text) and \
                 len(chemical_makeup_text.split(',')) != len(
-            chemical_makeup_text_pct.split(',')):
+                chemical_makeup_text_pct.split(',')):
             self.add_error('chemical_makeup_text_pct',
                            make_msg(len(chemical_makeup_text.split(',')),
                                     text=True))

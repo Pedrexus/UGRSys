@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from labs.validators import phone_regex
 
@@ -19,12 +20,21 @@ class MyUser(models.Model):
                                    verbose_name='Departamento')
     laboratory = models.ForeignKey('labs.Laboratory', on_delete=models.CASCADE,
                                    verbose_name='Laboratório')
-    email = models.EmailField(verbose_name='e-mail', unique=True)
+    email = models.EmailField(verbose_name='e-mail', unique=True,
+                              error_messages={
+                                  'unique': _("Esse e-mail já foi registrado. "
+                                              "Tente criar a sua conta com "
+                                              "outro e-mail.")})
     email_confirmed = models.BooleanField(default=False,
                                           verbose_name='e-mail verificado?')
     phone_number = models.CharField(validators=[phone_regex], max_length=17,
                                     verbose_name='Contato telefônico',
-                                    unique=True)
+                                    unique=True,
+                                    error_messages={
+                                        'unique': _(
+                                            "Esse número de telefone já foi "
+                                            "registrado. Tente criar a sua "
+                                            "conta com outro número.")})
 
     class Meta:
         verbose_name = 'Gerador'
