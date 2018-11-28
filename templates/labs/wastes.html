@@ -211,6 +211,7 @@
                 <th scope="col">Resíduo</th>
                 <th scope="col" class="text-center">Situação</th>
                 <th scope="col" class="text-center">Etiqueta</th>
+                <th scope="col" class="text-center">Cancelar envio</th>
             </tr>
             </thead>
             <tbody>
@@ -224,6 +225,14 @@
                             <i class="fas fa-file-alt fa-2x"></i>
                         </a>
                     </td>
+
+                    <td class="text-center">
+                        <a class="btn btn-danger"
+                           href="{% url 'cancel_dispatch' waste.id %}">
+                            <i class="fas fa-ban fa-2x"></i>
+                        </a>
+                    </td>
+
                 </tr>
             {% endfor %}
             </tbody>

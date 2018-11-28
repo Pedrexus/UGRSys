@@ -51,7 +51,7 @@ class WasteForm(forms.ModelForm):
                 'O resíduo contém geradores de cianeto?'),
             'amine': _('O resíduo contém aminas?'),
             'chemical_makeup': _('Composição Química'),
-            'chemical_makeup_pct': _('Concentrações'),
+            'chemical_makeup_pct': _('Concentrações (separar com vírgulas e incluir o sinal de porcentagem %)'),
             'chemical_makeup_text': _('Composição Química Extra'),
             'chemical_makeup_text_pct': _('Concentrações Extra'),
             'explosive': _('explosivo?'),

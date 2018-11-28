@@ -111,6 +111,13 @@ def user_wastes_delete(request, waste_id):
     return redirect('user_wastes')
 
 
+def user_wastes_cancel_dispatch(request, waste_id):
+    waste = get_object_or_404(Waste, pk=waste_id)
+    waste.status = STATUS_1
+    # TODO: verificar funcionamento
+    return redirect('user_wastes')
+
+
 def user_wastes_bookmark(request, waste_id):
     original_waste = get_object_or_404(Waste, pk=waste_id)
     chemical_makeup = original_waste.chemical_makeup.all()

@@ -3,7 +3,7 @@ from django.urls import path
 from .views import user_home, user_data, user_stats, user_wastes, \
     user_wastes_create, user_wastes_update, user_wastes_delete, \
     user_wastes_bookmark, user_bookmarked_waste_use, \
-    user_bookmarked_waste_delete, user_data_update
+    user_bookmarked_waste_delete, user_data_update, user_wastes_cancel_dispatch
 
 urlpatterns = [
     path('user/', user_home, name='user_home'),
@@ -16,6 +16,8 @@ urlpatterns = [
          name='update_waste'),
     path('meus_residuos/delete/<int:waste_id>/', user_wastes_delete,
          name='delete_waste'),
+    path('meus_residuos/cancel_dispatch/<int:waste_id>/', user_wastes_cancel_dispatch,
+         name='cancel_dispatch'), #TODO: verifical funcionamento
     path('meus_residuos/bookmark/<int:waste_id>/', user_wastes_bookmark,
          name='bookmark_waste'),
     path('meus_residuos/bookmark/use/<int:waste_id>/',

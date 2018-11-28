@@ -22,6 +22,9 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <!--{{ form.full_name.label_tag }}-->
+                                <div class="alert alert-warning" role="alert">
+                                    A conta deve ser de uso individual, não podendo ser compartilhadas pelos membros de um laboratório!
+                                </div>
                                 {% render_field form.full_name class+="form-control" placeholder=form.full_name.label aria-describedby="fullnameHelpBlock" %}
                                 <small id="fullnameHelpBlock"
                                        class="form-text text-muted">
