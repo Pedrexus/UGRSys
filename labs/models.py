@@ -83,8 +83,8 @@ class Waste(models.Model):
                                  verbose_name='Quantidade')
 
     UNITS_CHOICES = (
-        ('Kg', 'Kilogramas'),
-        ('L', 'Litros')
+        ('Kg', 'Kg'),
+        ('L', 'L')
     )
     unit = models.CharField(max_length=2, choices=UNITS_CHOICES, default='L',
                             verbose_name='unidade')
@@ -103,8 +103,9 @@ class Waste(models.Model):
                                  verbose_name='Estado do resíduo:')
 
     SOLVENT = (
-        ('A', 'Solução Aquosa'),
-        ('O', 'Solvente Orgânico')
+        ('A', 'Água'),
+        ('O', 'Orgânico'),
+        ('N', 'Nenhum')
     )
 
     solvent_type = models.CharField(max_length=7, choices=SOLVENT, default='A',

@@ -71,7 +71,8 @@ class WasteForm(forms.ModelForm):
 
             'chemical_makeup': _('Composição química do resíduo.'),
             'chemical_makeup_pct': _('Separe as concentrações por vírgula,'
-                                     ' e.g.: 30%, 15%, 55%'),
+                                     ' e.g.: 30%, 15%, 55%. '
+                                     'Preste atenção à ordem!'),
 
             'chemical_makeup_text': _('Substâncias que não tenham sido'
                                       ' encontradas no campo anterior. '
@@ -79,10 +80,12 @@ class WasteForm(forms.ModelForm):
                                       'e.g.: Bananas, Chocolate'),
             'chemical_makeup_text_pct': _('Concentrações dos compostos extras.'
                                           ' Separe por vírgula a concentração'
-                                          ' de cada um dos compostos.'),
+                                          ' de cada um dos compostos. '
+                                          'Preste atenção à ordem!'),
 
             'solvent_type': _(
-                'Caso a solução seja líquida, qual o solvente?'),
+                'Caso a solução seja líquida, qual o solvente? '
+                'Inserir "Nenhum" caso seja sólido'),
         }
         error_messages = {
             'chemical_makeup_pct': {

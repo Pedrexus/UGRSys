@@ -14,66 +14,7 @@
             <form method="post">
                 {% csrf_token %}
 
-                <div class="form-row">
-                    <div class="form-group col-md-8">
-                        {{ waste_form.amount.label_tag }}
-                        {% render_field waste_form.amount class+="form-control" placeholder=waste_form.amount.label aria-describedby="amountHelpBlock" %}
-                        <small id="amountHelpBlock"
-                               class="form-text text-muted">
-                            {{ waste_form.amount.help_text }}
-                        </small>
-                    </div>
-                    <div class="form-group col-md-4">
-                        {{ waste_form.unit.label_tag }}
-                        {% render_field waste_form.unit class+="form-control" placeholder=waste_form.unit.label %}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-5 dropdown-mul">
-                        {{ waste_form.chemical_makeup.label_tag }}
-                        {% render_field waste_form.chemical_makeup class+="form-control form-control-lg " aria-describedby="search_chemicalHelpBlock" %}
-                    </div>
-                    <div class="form-group col-md-7">
-                        {{ waste_form.chemical_makeup_pct.label_tag }}
-                        {% render_field waste_form.chemical_makeup_pct class+="form-control" placeholder=waste_form.chemical_makeup_pct.label aria-describedby="percentagesHelpBlock" %}
-                        <small id="percentagesHelpBlock"
-                               class="form-text text-muted">
-                            {{ waste_form.chemical_makeup_pct.help_text }}
-                        </small>
-                        {% if waste_form.errors %}
-                            {% for error in waste_form.chemical_makeup_pct.errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ error|escape }}</strong>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-7">
-                        {{ waste_form.chemical_makeup_text.label_tag }}
-                        {% render_field waste_form.chemical_makeup_text class+="form-control" placeholder=waste_form.chemical_makeup_text.label aria-describedby="chemicalHelpBlock" %}
-                        <small id="chemicalHelpBlock"
-                               class="form-text text-muted">
-                            {{ waste_form.chemical_makeup_text.help_text }}
-                        </small>
-                    </div>
-                    <div class="form-group col-md-5">
-                        {{ waste_form.chemical_makeup_text_pct.label_tag }}
-                        {% render_field waste_form.chemical_makeup_text_pct class+="form-control" placeholder=waste_form.chemical_makeup_text_pct.label aria-describedby="percentagesHelpBlock" %}
-                        <small id="percentagesHelpBlock"
-                               class="form-text text-muted">
-                            {{ waste_form.chemical_makeup_text_pct.help_text }}
-                        </small>
-                        {% if waste_form.errors %}
-                            {% for error in waste_form.chemical_makeup_text_pct.errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ error|escape }}</strong>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
+                <!--Linha: Estado Físico  Tipo solvente  pH-->
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         {{ waste_form.is_liquid.label_tag }}
@@ -92,6 +33,8 @@
                         {% render_field waste_form.pH class+="form-control" %}
                     </div>
                 </div>
+
+                <!--Características sim/não/não sei-->
                 <div class="form-row">
                     <div class="col">
                         <div class="form-group col-md-auto">
@@ -194,6 +137,70 @@
                         </div>
                     </div>
                 </div>
+
+                <!--Características físico-químicas-->
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        {{ waste_form.amount.label_tag }}
+                        {% render_field waste_form.amount class+="form-control" placeholder=waste_form.amount.label aria-describedby="amountHelpBlock" %}
+                        <small id="amountHelpBlock"
+                               class="form-text text-muted">
+                            {{ waste_form.amount.help_text }}
+                        </small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{ waste_form.unit.label_tag }}
+                        {% render_field waste_form.unit class+="form-control" placeholder=waste_form.unit.label %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-5 dropdown-mul">
+                        {{ waste_form.chemical_makeup.label_tag }}
+                        {% render_field waste_form.chemical_makeup class+="form-control form-control-lg " aria-describedby="search_chemicalHelpBlock" %}
+                    </div>
+                    <div class="form-group col-md-7">
+                        {{ waste_form.chemical_makeup_pct.label_tag }}
+                        {% render_field waste_form.chemical_makeup_pct class+="form-control" placeholder=waste_form.chemical_makeup_pct.label aria-describedby="percentagesHelpBlock" %}
+                        <small id="percentagesHelpBlock"
+                               class="form-text text-muted">
+                            {{ waste_form.chemical_makeup_pct.help_text }}
+                        </small>
+                        {% if waste_form.errors %}
+                            {% for error in waste_form.chemical_makeup_pct.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-7">
+                        {{ waste_form.chemical_makeup_text.label_tag }}
+                        {% render_field waste_form.chemical_makeup_text class+="form-control" placeholder=waste_form.chemical_makeup_text.label aria-describedby="chemicalHelpBlock" %}
+                        <small id="chemicalHelpBlock"
+                               class="form-text text-muted">
+                            {{ waste_form.chemical_makeup_text.help_text }}
+                        </small>
+                    </div>
+                    <div class="form-group col-md-5">
+                        {{ waste_form.chemical_makeup_text_pct.label_tag }}
+                        {% render_field waste_form.chemical_makeup_text_pct class+="form-control" placeholder=waste_form.chemical_makeup_text_pct.label aria-describedby="percentagesHelpBlock" %}
+                        <small id="percentagesHelpBlock"
+                               class="form-text text-muted">
+                            {{ waste_form.chemical_makeup_text_pct.help_text }}
+                        </small>
+                        {% if waste_form.errors %}
+                            {% for error in waste_form.chemical_makeup_text_pct.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!--Comentários-->
                 <div class="form-row">
                     <div class="form-group col-md-auto">
                         {{ waste_form.comments.label_tag }}
