@@ -1,12 +1,7 @@
-from django.http import HttpResponse
 from PIL import Image
 import barcode
 from barcode.writer import ImageWriter
-from django.core.files import File
 
-import random
-
-#TODO: implementar geração codigo de barra
 def graphics(request):
 # ... create/load image here ...
     #INK = "red", "blue", "green", "yellow"

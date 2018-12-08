@@ -1,10 +1,13 @@
-import re
+import base64
+import io
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import render
 
 from labs.models import Waste
 from registration.models import MyUser
+import pyqrcode as qr
 from .labels import render_label
 
 
@@ -14,13 +17,9 @@ def generate_view(request, residuo_id, *args, **kwargs):
     generator = MyUser.objects.get(user=request.user)
     checks = waste.boolean_to_x()
 
-    #print(waste.chemical_makeup_names)
-    print(waste.chemical_makeup)
-
     context = {
         "residuo": waste.chemical_makeup_names,
-         # "residuo_extra": waste.chemical_makeup_text,
-         "barcode": barcode_number(waste),
+        "qrcode": qr_as_tag(obj=waste, encode='svg'),
         "nome_gerador": generator,
         "laboratorio": generator.laboratory,
         "telefone": generator.phone_number,
@@ -36,12 +35,39 @@ def generate_view(request, residuo_id, *args, **kwargs):
         "inventory_location": waste.inventory_label()
     }
 
-#TODO: INCLUIR OPÇÃO PARA OUTROS TAMANHOS DE ETIQUETA
-    label = render_label('labelgen/label.html', context)
-    return HttpResponse(label, content_type='html')
+    # TODO: INCLUIR OPÇÃO PARA OUTROS TAMANHOS DE ETIQUETA
+    return render(request, 'labelgen/label.html', context)
 
-def barcode_number(waste):
-    #TODO: colocar data e limite de dígitos
-    date = re.sub("\D", "", str(waste.creation_date))[:8] #YYYYMMDD :8
-    return date+str(waste.pk).zfill(6) #preenche até 6 digitos. Quando passar de 1 milhao de resíduos vai quebrar
 
+def qr_as_tag(obj, encode='svg'):
+    if encode == 'svg':
+        return qrcreate(obj).getvalue().split(b'\n')[1].decode("utf-8")
+    elif encode == 'png':
+        binary_img = base64.b64encode(qrcreate(obj).getvalue())
+        img_tag = "<img src='data:image/png;base64," + binary_img + "'/>"
+        return img_tag
+
+
+def qrcreate(obj):
+    text = waste_as_text(obj)
+    img = qr.create(text, error='L', version=12, mode='binary')
+
+    buffer = io.BytesIO()
+    img.svg(buffer, scale=2)
+
+    # do whatever you want with buffer.getvalue()
+    return buffer
+
+
+def waste_as_text(waste):
+    generator = MyUser.objects.get(user=waste.generator)
+    text = f"Dados do Resíduo:\n " \
+        f"\tNome do Gerador:\t {generator}\n" \
+        f"\tContato do Gerador:\t {generator.phone_number}\n" \
+        f"\te-mail do Gerador:\t {generator.email}\n" \
+        f"\tGrupo do Gerador:\t {generator.laboratory}\n" \
+        f"\tData de Criação:\t {waste.creation_date}\n" \
+        f"\tComposição Química:\t {waste.chemical_makeup_names}\n" \
+        f"\tpH:\t {waste.pH}\n"
+
+    return text

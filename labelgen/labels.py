@@ -3,7 +3,7 @@ import os
 from django.conf import settings
 import barcode
 from barcode.writer import ImageWriter
-import random, string
+
 
 def render_label(template_src, context_dict={}):
     template = get_template(template_src)
