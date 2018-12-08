@@ -2,13 +2,11 @@ import base64
 import io
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import render
 
 from labs.models import Waste
 from registration.models import MyUser
 import pyqrcode as qr
-from .labels import render_label
 
 
 @login_required
