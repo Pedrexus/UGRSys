@@ -151,7 +151,7 @@ class LaboratoryAdmin(admin.ModelAdmin):
     def get_frequencies(obj):
         lab_users = [my_user.user for my_user in
                      MyUser.objects.filter(laboratory=obj)]
-        lab_wastes = Waste.objects.filter(generator__in=lab_users)
+        lab_wastes = Waste.objects.filter(generator__in=lab_users).exclude(status=Waste.STATUS_1)
 
         frequencies = defaultdict(lambda: defaultdict(float))
         for waste in lab_wastes:

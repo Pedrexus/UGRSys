@@ -1,0 +1,70 @@
+{% extends 'base_logged.html' %}
+{% load static %}
+
+{% block title %} Minhas Estatísticas {% endblock %}
+
+{% block main %}
+
+    <div class="row">
+        <div class="col-sm-3">
+
+            <div class="card text-white bg-{{ grade_color }} mb-3" style="max-width: 18rem;">
+                <div class="card-header">Avaliação</div>
+                <div class="card-body text-center p-5">
+                    <p class="card-text h1">{{ grade }}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text">
+                        <small class="text-white">{{ grade_msg }}</small>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                <div class="card-header">Potencial de Recuperação</div>
+                <div class="card-body">
+                    <p class="card-text text-center p-5 h1">{{ reagents }}</p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text">
+                        <small class="text-white">Quanto do resíduo produzido foi convertido em novos reagentes</small>
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-6 text-center">
+            <div class="card text-dark bg-light mb-3">
+                <div class="card-header">Meu Selo</div>
+                <div class="card-body">
+                    <img class="card-img rounded" src="{% static img %}"
+                         style="
+                            width: 100%;
+                            // border: 3ch solid rgb(247,247,247);
+                        "/>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+
+            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                <div class="card-header">Meus números</div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Eu já entreguei...</h5>
+                    <p class="card-text h3 p-3">{{ amount }}</p>
+                    <p class="card-text">...em resíduos.</p>
+                </div>
+            </div>
+
+            <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header">Meu Resíduo Favorito</div>
+                <div class="card-body text-center p-5">
+                    <p class="card-text h3">{{ most_common }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

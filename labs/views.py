@@ -40,13 +40,6 @@ def user_data_update(request):
     data = {'this_user': my_user, 'form': form}
     return render(request, 'labs/data_form.html', data)
 
-
-@login_required
-def user_stats(request):
-    data = {}
-    return render(request, 'labs/stats.html', data)
-
-
 @login_required
 def user_wastes(request):
     data = {
