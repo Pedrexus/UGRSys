@@ -28,11 +28,11 @@ def user_grade_extras(grade):
               'Assim que você enviar um resíduo, volte aqui ' \
               'para saber como foi.'
         color = 'secondary'
-    elif 0 < grade <= 6:
+    elif 0 < grade < 6:
         msg = 'Algo não está sendo feito corretamente. ' \
               'Procure o DeGR para saber como melhorar.'
         color = 'danger'
-    elif 6 < grade <= 8.5:
+    elif 6 <= grade <= 8.5:
         msg = 'Você está indo bem! ' \
               'Procure o DeGR para saber como pode melhorar ainda mais.'
         color = 'warning'
