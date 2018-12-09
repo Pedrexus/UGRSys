@@ -52,7 +52,7 @@ def user_stats(request):
 
         'reagents': reagents,
 
-        'img': f'images/ecoselo/file{round(grade) - 1}.jpeg',
+        'img': f'images/ecoselo/file{round(grade)}.jpeg',
 
         'amount': amount,
         'most_common': most_common,
