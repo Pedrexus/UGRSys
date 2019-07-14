@@ -1,6 +1,9 @@
 import csv
 from django.http import HttpResponse
 
+#possivelmente criei isso para teste....
+#DEPRECATED
+
 def some_view(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')

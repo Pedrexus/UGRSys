@@ -17,7 +17,7 @@ urlpatterns = [
     path('meus_residuos/delete/<int:waste_id>/', user_wastes_delete,
          name='delete_waste'),
     path('meus_residuos/cancel_dispatch/<int:waste_id>/', user_wastes_cancel_dispatch,
-         name='cancel_dispatch'), #TODO: verifical funcionamento
+         name='cancel_dispatch'), #TODO: verificar funcionamento
     path('meus_residuos/bookmark/<int:waste_id>/', user_wastes_bookmark,
          name='bookmark_waste'),
     path('meus_residuos/bookmark/use/<int:waste_id>/',

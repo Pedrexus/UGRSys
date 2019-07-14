@@ -1,7 +1,7 @@
 from django.core.validators import RegexValidator
 
 message_phone_regex = "O número de telefone deve estar no formato:" \
-                      " '+999999999'." \
+                      " '+xx999999999'." \
                       " Até 15 dígitos são permitidos."
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                              message=message_phone_regex)

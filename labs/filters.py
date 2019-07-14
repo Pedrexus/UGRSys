@@ -5,8 +5,8 @@ from registration.models import MyUser
 
 
 class GeneratorListFilter(admin.SimpleListFilter):
-    # Human-readable title which will be displayed in the
-    # right admin sidebar just above the filter options.
+    '''Human-readable title which will be displayed in the
+    right admin sidebar just above the filter options.'''
     title = _('Gerador')
 
     # Parameter for the filter that will be used in the URL query.

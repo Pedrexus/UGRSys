@@ -6,7 +6,8 @@ from django.core.files import File
 
 import random
 
-#TODO: implementar geração codigo de barra
+#TODO: nao sei se faz sentido deixar esse aquivo separado. talvez juntar com o labels
+#DONE: implementar geração codigo de barra
 def graphics(request):
 # ... create/load image here ...
     #INK = "red", "blue", "green", "yellow"

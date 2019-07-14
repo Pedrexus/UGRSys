@@ -1,5 +1,6 @@
 from labs.models import Waste
 
+#TODO: pq essas funções não estão na classe Waste?
 
 def update_wastes(request, opt='send'):
     if opt == 'send':

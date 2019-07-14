@@ -6,6 +6,7 @@ from suggestions.models import Suggestion
 
 @admin.register(Suggestion)
 class EvaluationAdmin(admin.ModelAdmin):
+    '''Class to provide staff handling of user made suggestions'''
     list_display = (
         'user',
         'get_user_department',
@@ -17,9 +18,11 @@ class EvaluationAdmin(admin.ModelAdmin):
 
     def get_user_department(self, obj):
         return MyUser.objects.get(user=obj.user).department
+
     get_user_department.short_description = 'Departamento'
 
 
     def get_user_laboratory(self, obj):
         return MyUser.objects.get(user=obj.user).laboratory
+
     get_user_laboratory.short_description = 'Laboratório'

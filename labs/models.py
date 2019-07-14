@@ -10,8 +10,13 @@ from substances.models import SubstanceName, Properties
 
 
 class Department(models.Model):
+    '''Departamento. Um departamento pode conter vários laboratórios'''
     name = models.CharField(max_length=100, null=True, blank=True,
                             verbose_name='Nome do Departamento', unique=True)
+
+    #TODO: novo, testar implementação:
+    abbrv = models.CharField(max_length=10, null=True, blank=True,
+                            verbose_name='Sigla do Departamento', unique=True)
 
     class Meta:
         verbose_name = 'Departamento'
@@ -22,8 +27,13 @@ class Department(models.Model):
 
 
 class Laboratory(models.Model):
+    '''Laboratório. Um laboratório pode conter vários geradores'''
     name = models.CharField(max_length=100, null=True, blank=True,
                             verbose_name='Nome do Laboratório', unique=True)
+
+    #TODO: novo, testar implementação:
+    abbrv = models.CharField(max_length=10, null=True, blank=True,
+                            verbose_name='Sigla do Laboratório', unique=True)
 
     class Meta:
         verbose_name = 'Laboratório'
@@ -34,13 +44,17 @@ class Laboratory(models.Model):
 
 
 class Waste(models.Model):
+    '''Unidade discreta de resíduo'''
     class Meta:
         verbose_name = 'Resíduo'
         verbose_name_plural = 'Resíduos'
 
+    #Gerador é (atualmente) o usuário responsável pelo resíduo.
+    #Acompanhar vida real para ver se isso é respeitado!
     generator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   on_delete=models.CASCADE,
                                   verbose_name='Gerador')
+
     # Composição química do banco de dados:
     chemical_makeup = models.ManyToManyField('substances.SubstanceName',
                                              verbose_name='Composição química',
@@ -58,6 +72,8 @@ class Waste(models.Model):
                                                 verbose_name='Concentrações',
                                                 validators=[percentages_regex],
                                                 default='0%')
+    #Inelegante, mas funciona por enquanto.
+    #Acompanhar POPs do DeGR para ver se isso está adequado
     STATUS_1 = 'User inventory'
     STATUS_2 = 'Waiting removal'
     STATUS_3 = 'DeGR inventory'
@@ -78,6 +94,10 @@ class Waste(models.Model):
                                          verbose_name='Data de criação')
     last_modified_date = models.DateTimeField(auto_now=True,
                                               verbose_name='Data de modificação')
+
+    #Todas as escolhas daqui para baixo foram feitas conjuntamente com
+    #o pessoal do DeGR de acordo com o que seria mais útil para o fluxo
+    #de trabalho deles.
 
     amount = models.DecimalField(max_digits=10, decimal_places=3,
                                  verbose_name='Quantidade')
@@ -194,9 +214,14 @@ class Waste(models.Model):
     def __str__(self):
         return ': '.join(
             [MyUser.objects.get(user=self.generator).full_name,
-             self.chemical_makeup_names])
+             self.chemical_makeup_names]) #not so sure... talvez tenha
+             #concatenar só para um ou dois nomes para que a string seja útil
 
     def inventory_label(self):
+        #Esquema de inventório feito conjuntamente com a Paula do DeGR.
+        #Tem um fluxograma em algum lugar...
+        #TODO: achar o fluxograma e colocar no git
+        #Como estão reformando o galpão, talvez queiram um diferente.
         s = ''
 
         if self.is_liquid == 'S':
